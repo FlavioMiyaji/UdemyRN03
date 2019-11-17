@@ -1,4 +1,4 @@
-# Second app in React Native
+# Third app in React Native
 From Udemy course: The Practical Guide.
 
 From: Maximilian Schwarzmüller
