@@ -14,8 +14,13 @@ const UserProductsScreen = (props: any) => {
     );
 };
 
+UserProductsScreen.navigationOptions = {
+    headerTitle: 'UserProductsScreen',
+};
+
 const styles = StyleSheet.create({
     screen: {
+        flex: 1,
         backgroundColor: Colors.background,
         justifyContent: 'center',
         alignItems: 'center',

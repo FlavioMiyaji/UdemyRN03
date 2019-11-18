@@ -4,18 +4,32 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Colors, Fonts } from '../../constants';
+import { Product } from '../../models';
 
 const ProductDetailScreen = (props: any) => {
+    const productId = props.navigation.getParam('productId');
+    const selectedProduct: Product = useSelector((state: any) =>
+        state.productsReducer.availableProducts.find(({ id }: Product) => id === productId)
+    );
     return (
         <View style={styles.screen}>
-            <Text style={styles.title}>ProductDetailScreen is not ready yet.</Text>
+            <Text style={styles.title}>{selectedProduct.title}</Text>
         </View>
     );
 };
 
+ProductDetailScreen.navigationOptions = ({ navigation }: any) => {
+    const productTitle = navigation.getParam('productTitle');
+    return {
+        headerTitle: productTitle,
+    };
+};
+
 const styles = StyleSheet.create({
     screen: {
+        flex: 1,
         backgroundColor: Colors.background,
         justifyContent: 'center',
         alignItems: 'center',

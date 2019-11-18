@@ -14,8 +14,13 @@ const OrderScreen = (props: any) => {
     );
 };
 
+OrderScreen.navigationOptions = {
+    headerTitle: 'OrderScreen',
+};
+
 const styles = StyleSheet.create({
     screen: {
+        flex: 1,
         backgroundColor: Colors.background,
         justifyContent: 'center',
         alignItems: 'center',

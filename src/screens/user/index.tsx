@@ -1,5 +1,5 @@
-import UserProductsScreen from "./UserProductsScreen";
-import EditProductScreen from "./EditProductScreen";
+import UserProductsScreen from './UserProductsScreen';
+import EditProductScreen from './EditProductScreen';
 
 export {
     EditProductScreen,

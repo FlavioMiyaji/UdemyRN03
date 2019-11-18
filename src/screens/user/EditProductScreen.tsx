@@ -14,8 +14,13 @@ const EditProductScreen = (props: any) => {
     );
 };
 
+EditProductScreen.navigationOptions = {
+    headerTitle: 'EditProductScreen',
+};
+
 const styles = StyleSheet.create({
     screen: {
+        flex: 1,
         backgroundColor: Colors.background,
         justifyContent: 'center',
         alignItems: 'center',

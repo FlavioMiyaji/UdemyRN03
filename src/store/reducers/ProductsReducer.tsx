@@ -1,6 +1,6 @@
-import ProductsReducerModel from "./ProductsReducerModel";
-import DummyProducts from "../../data/dummy-data";
-import { Product } from "../../models";
+import ProductsReducerModel from './ProductsReducerModel';
+import DummyProducts from '../../data/dummy-data';
+import { Product } from '../../models';
 
 const initState = new ProductsReducerModel(
     DummyProducts,

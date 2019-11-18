@@ -14,8 +14,13 @@ const CartScreen = (props: any) => {
     );
 };
 
+CartScreen.navigationOptions = {
+    headerTitle: 'CartScreen',
+};
+
 const styles = StyleSheet.create({
     screen: {
+        flex: 1,
         backgroundColor: Colors.background,
         justifyContent: 'center',
         alignItems: 'center',
