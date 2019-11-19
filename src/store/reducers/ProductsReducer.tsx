@@ -1,4 +1,4 @@
-import ProductsReducerModel from './ProductsReducerModel';
+import ProductsReducerModel from '../model/ProductsReducerModel';
 import DummyProducts from '../../data/dummy-data';
 import { Product } from '../../models';
 

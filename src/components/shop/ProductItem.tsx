@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 8,
         elevation: 5,
-        height: 300,
+        height: 230,
         margin: 10,
         borderRadius: 10,
     },
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '65%',
+        height: '60%',
     },
     details: {
         alignItems: 'center',
         justifyContent: 'center',
-        height: '15%',
+        height: '20%',
     },
     title: {
         fontSize: 18,

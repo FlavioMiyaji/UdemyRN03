@@ -8,7 +8,8 @@ import { Colors } from '../constants';
 import {
     ProductsOverviewScreen,
     ProductDetailScreen,
-} from '../screens/shop';
+    CartScreen,
+} from '../screens';
 
 const defaultNavOptions: NavigationStackOptions = {
     headerStyle: {
@@ -21,6 +22,7 @@ const ProductsNavigator = createStackNavigator(
     {
         ProductsOverview: ProductsOverviewScreen,
         ProductDetail: ProductDetailScreen,
+        Cart: CartScreen,
     },
     {
         defaultNavigationOptions: defaultNavOptions,

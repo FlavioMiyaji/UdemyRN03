@@ -3,13 +3,16 @@ import {
     StyleSheet,
     FlatList,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Colors } from '../../constants';
 import { Product } from '../../models';
-import ProductItem from '../../components/shop/ProductItem';
+import { addToCard } from '../../store/actions/CartActions';
+import { ProductItem, HeaderButton } from '../../components';
 
 const ProductsOverviewScreen = (props: any) => {
     const products: Product[] = useSelector((state: any) => state.productsReducer.availableProducts);
+    const dispatch = useDispatch();
+
     return (
         <FlatList
             keyExtractor={({ id }: Product) => (id)}
@@ -26,15 +29,25 @@ const ProductsOverviewScreen = (props: any) => {
                             productTitle: item.title,
                         });
                     }}
-                    onAddToCart={() => { }}
+                    onAddToCart={() => (
+                        dispatch(addToCard(item))
+                    )}
                 />
             )}
         />
     );
 };
 
-ProductsOverviewScreen.navigationOptions = {
-    headerTitle: 'All Products',
+ProductsOverviewScreen.navigationOptions = ({ navigation }: any) => {
+    return {
+        headerTitle: 'All Products',
+        headerRight: <HeaderButton
+            iconName="shopping-cart"
+            onPress={() => {
+                navigation.navigate('Cart');
+            }}
+        />
+    };
 };
 
 const styles = StyleSheet.create({
