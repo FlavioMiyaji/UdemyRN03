@@ -9,7 +9,11 @@ import {
     TouchableOpacity,
     TouchableNativeFeedback,
 } from 'react-native';
-import { Colors, Fonts } from '../../constants';
+import {
+    Colors,
+    Fonts,
+    Styles,
+} from '../../constants';
 
 const ProductItem = (props: any) => {
     let MyTouchable: any = TouchableOpacity;
@@ -53,15 +57,9 @@ const ProductItem = (props: any) => {
 
 const styles = StyleSheet.create({
     product: {
-        backgroundColor: Colors.surface,
-        shadowColor: Colors.onSurface,
-        shadowOpacity: 0.2,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 8,
-        elevation: 5,
+        ...Styles.elevation,
         height: 230,
         margin: 10,
-        borderRadius: 10,
     },
     touchable: {
         borderRadius: 10,

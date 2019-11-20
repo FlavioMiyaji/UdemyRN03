@@ -4,7 +4,7 @@ import {
     FlatList,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { Colors } from '../../constants';
+import { Colors, Styles } from '../../constants';
 import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
 import { ProductItem, HeaderButton } from '../../components';
@@ -52,7 +52,8 @@ ProductsOverviewScreen.navigationOptions = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: Colors.background,
+        ...Styles.screen,
+        flex: 0,
     },
 });
 

@@ -4,11 +4,11 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { Colors, Fonts } from '../../constants';
+import { Colors, Fonts, Styles } from '../../constants';
 
 const OrderScreen = (props: any) => {
     return (
-        <View style={styles.screen}>
+        <View style={Styles.screen}>
             <Text style={styles.title}>OrderScreen is not ready yet.</Text>
         </View>
     );
@@ -19,12 +19,6 @@ OrderScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        backgroundColor: Colors.background,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     title: {
         fontFamily: Fonts.bold,
         color: Colors.onBackground,
