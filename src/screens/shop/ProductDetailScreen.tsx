@@ -53,8 +53,10 @@ ProductDetailScreen.navigationOptions = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
     screen: {
-        ...Styles.screen,
+        backgroundColor: Colors.background,
+        alignItems: 'stretch',
         padding: 0,
+        flexGrow: 1,
     },
     image: {
         backgroundColor: Colors.surface,

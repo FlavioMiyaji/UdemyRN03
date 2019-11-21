@@ -1,5 +1,3 @@
-import React from 'react';
-import { Alert } from 'react-native';
 import CartReducerModel from '../model/CartReducerModel';
 import { Product, CartItem } from '../../models';
 import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions/CartActions';
@@ -11,12 +9,11 @@ const CartReducer = (state: CartReducerModel = initState, action: any) => {
         case ADD_TO_CART: {
             const product: Product = action.payload;
             const price = product.price;
-            const title = product.title;
 
             const items = state.items;
-            let item: CartItem | undefined = items.find(({ productId }) => (productId === product.id));
+            let item: CartItem | undefined = items.find(({ product: { id } }) => (id === product.id));
             if (!item) {
-                item = new CartItem(0, product.id, price, title, 0);
+                item = new CartItem(0, product, 0);
                 items.push(item);
             }
             item.quantity += 1;
@@ -32,17 +29,24 @@ const CartReducer = (state: CartReducerModel = initState, action: any) => {
             const id: string = action.payload;
 
             const items = state.items;
-            let index: number | undefined = items.findIndex(({ productId }) => (productId === id));
-            let sum = 0;
+            let index: number | undefined = items.findIndex(({ product: { id } }) => (id === id));
+            let price = 0;
             if (index >= 0) {
-                sum += items[index].sum;
-                items.splice(index, 1);
+                const item = items[index];
+                price = item.product.price;
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                    item.sum -= item.product.price;
+                } else {
+                    items.splice(index, 1);
+                }
             }
 
+            const totalAmount = state.totalAmount - price;
             return {
                 ...state,
                 items: [...items],
-                totalAmount: state.totalAmount - sum,
+                totalAmount: totalAmount > 0.0 ? totalAmount : 0.0,
             };
         }
         default: return state;

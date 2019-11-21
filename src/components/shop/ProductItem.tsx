@@ -44,7 +44,7 @@ const ProductItem = (props: any) => {
                             />
                             <Button
                                 color={Colors.primary}
-                                title="To Cart"
+                                title="Add to Cart"
                                 onPress={props.onAddToCart}
                             />
                         </View>

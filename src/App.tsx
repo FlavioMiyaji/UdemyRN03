@@ -13,10 +13,12 @@ import ProductsReducer from './store/reducers/ProductsReducer';
 import { Colors } from './constants';
 import ShopNavigator from './navigation/ShopNavigator';
 import CartReducer from './store/reducers/CartReducer';
+import OrdersReducer from './store/reducers/OrdersReducer';
 
 const rootReducer = combineReducers({
   productsReducer: ProductsReducer,
   cartReducer: CartReducer,
+  orders: OrdersReducer,
 });
 
 const store = createStore(rootReducer);

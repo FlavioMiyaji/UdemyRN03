@@ -12,6 +12,7 @@ import { Colors, Fonts, Styles } from '../../constants';
 import { CartItem } from '../../models';
 import { CartItem as Item } from '../../components';
 import { removeFromCard } from '../../store/actions/CartActions';
+import { addOrder } from '../../store/actions/OrdersActions';
 
 const CartScreen = (props: any) => {
     const items: CartItem[] = useSelector((state: any) => state.cartReducer.items);
@@ -27,21 +28,22 @@ const CartScreen = (props: any) => {
                 <Button
                     title="Order Now"
                     color={Colors.primary}
-                    onPress={() => { }}
+                    onPress={() => {
+                        dispatch(addOrder(items, totalAmount));
+                    }}
                 />
             </View>
             <FlatList
                 contentContainerStyle={{ padding: 10 }}
-                keyExtractor={({ productId }: CartItem) => (productId)}
+                keyExtractor={({ product: { id } }: CartItem) => (id)}
                 data={items}
                 renderItem={({ item }) => (
                     <Item
                         quantity={item.quantity}
-                        productPrice={item.productPrice}
-                        productTitle={item.productTitle}
+                        product={item.product}
                         sum={item.sum}
                         onPress={() => {
-                            dispatch(removeFromCard(item.productId))
+                            dispatch(removeFromCard(item.product.id))
                         }}
                     />
                 )}

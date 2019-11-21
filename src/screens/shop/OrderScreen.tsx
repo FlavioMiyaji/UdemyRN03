@@ -15,7 +15,7 @@ const OrderScreen = (props: any) => {
 };
 
 OrderScreen.navigationOptions = {
-    headerTitle: 'OrderScreen',
+    headerTitle: 'Your orders',
 };
 
 const styles = StyleSheet.create({

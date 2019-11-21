@@ -2,7 +2,7 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
+    Image,
     Platform,
     StyleSheet,
     TouchableOpacity,
@@ -16,31 +16,39 @@ const CartItem = (props: any) => {
     if (Platform.OS === 'android' && Platform.Version >= 21) {
         MyTouchable = TouchableNativeFeedback;
     }
+    const { product, quantity, sum } = props;
     return (
         <View style={styles.product}>
-            <Text style={styles.productTitle}>{props.productTitle}</Text>
-            <View style={styles.details}>
-                <Text style={styles.quantity}>{props.quantity.toFixed(2)}</Text>
-                <Text style={Styles.text}>${props.sum.toFixed(2)}</Text>
-                <MyTouchable
-                    onPress={props.onPress}
-                >
-                    <View style={styles.touchable}>
-                        <Icon
-                            color={Colors.onPrimaryVariant}
-                            name="trash"
-                            size={20}
-                        />
-                    </View>
-                </MyTouchable>
+            <View style={{ flex: 1, marginRight: 10 }}>
+                <Text style={styles.productTitle}>{product.title}</Text>
+                <View style={styles.details}>
+                    <Text style={styles.quantity}>{quantity.toFixed(2)}</Text>
+                    <Text style={Styles.text}>${sum.toFixed(2)}</Text>
+                </View>
             </View>
+            <MyTouchable
+                onPress={props.onPress}
+            >
+                <View style={styles.touchable}>
+                    <Icon
+                        color={Colors.onPrimaryVariant}
+                        name="trash"
+                        size={20}
+                    />
+                </View>
+            </MyTouchable>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     product: {
+        flex: 1,
+        flexDirection: 'row',
         padding: 5,
+        alignItems: 'center',
+        borderBottomColor: Colors.surface,
+        borderBottomWidth: 1,
     },
     touchable: {
         ...Styles.elevation,
