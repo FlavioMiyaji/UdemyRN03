@@ -1,11 +1,13 @@
+import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import {
     createStackNavigator,
     NavigationStackOptions,
 } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-import { Platform } from 'react-native';
-import { Colors, Fonts } from '../constants';
+import { Platform, Text } from 'react-native';
+import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
+import { Colors, Fonts, Styles } from '../constants';
 import {
     ProductsOverviewScreen,
     ProductDetailScreen,
@@ -13,15 +15,35 @@ import {
     OrderScreen,
 } from '../screens';
 
+const navOptions = (props: any) => {
+    return {
+        drawerLabel: ({ tintColor }: any) => (
+            <Text
+                style={{
+                    ...Styles.title,
+                    color: tintColor,
+                    padding: 10,
+                }}
+            >{props.label}</Text>
+        ),
+        drawerIcon: ({ tintColor }: any) => <Icon
+            solid
+            color={tintColor}
+            name={props.icon}
+            size={20}
+        />,
+    };
+};
+
 const defaultNavOptions: NavigationStackOptions = {
     headerStyle: {
         backgroundColor: Platform.OS === 'android' ? Colors.primary : Colors.background,
     },
     headerTitleStyle: {
-        fontFamily: Fonts.bold,
+        ...Styles.title,
     },
     headerBackTitleStyle: {
-        fontFamily: Fonts.regular,
+        ...Styles.text,
     },
     headerTintColor: Platform.OS === 'android' ? Colors.onPrimary : Colors.primary,
 };
@@ -33,6 +55,10 @@ const ProductsNavigator = createStackNavigator(
         Cart: CartScreen,
     },
     {
+        navigationOptions: navOptions({
+            label: 'Products',
+            icon: 'shopping-cart',
+        }),
         defaultNavigationOptions: defaultNavOptions,
     }
 );
@@ -42,6 +68,10 @@ const OrdersNavigator = createStackNavigator(
         Order: OrderScreen,
     },
     {
+        navigationOptions: navOptions({
+            label: 'Your Orders',
+            icon: 'list',
+        }),
         defaultNavigationOptions: defaultNavOptions,
     }
 );

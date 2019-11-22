@@ -1,28 +1,43 @@
 import React from 'react';
 import {
-    Text,
-    View,
-    StyleSheet,
+    FlatList, Text, StyleSheet,
 } from 'react-native';
-import { Colors, Fonts, Styles } from '../../constants';
+import { useSelector } from 'react-redux';
+import { Styles, Colors } from '../../constants';
+import { Order } from '../../models';
+import { OrderItem, HeaderButton } from '../../components';
 
 const OrderScreen = (props: any) => {
+    const orders = useSelector(({ orders }: any) => orders.orders);
     return (
-        <View style={Styles.screen}>
-            <Text style={styles.title}>OrderScreen is not ready yet.</Text>
-        </View>
+        <FlatList
+            keyExtractor={({ id }: Order) => String(id)}
+            contentContainerStyle={styles.screen}
+            data={orders}
+            renderItem={({ item }) => (
+                <OrderItem item={item} />
+            )}
+        />
     );
 };
 
-OrderScreen.navigationOptions = {
-    headerTitle: 'Your orders',
+OrderScreen.navigationOptions = ({ navigation }: any) => {
+    return {
+        headerTitle: 'Your Orders',
+        headerLeft: (<HeaderButton
+            iconName="bars"
+            onPress={() => {
+                navigation.toggleDrawer();
+            }}
+        />),
+    };
 };
 
 const styles = StyleSheet.create({
-    title: {
-        fontFamily: Fonts.bold,
-        color: Colors.onBackground,
-        textAlign: 'center',
+    screen: {
+        flexGrow: 1,
+        backgroundColor: Colors.background,
+        padding: 10,
     },
 });
 

@@ -2,20 +2,17 @@ import React from 'react';
 import {
     View,
     Text,
-    Image,
-    Platform,
     StyleSheet,
-    TouchableOpacity,
-    TouchableNativeFeedback,
 } from 'react-native';
-import { Colors, Styles, Fonts } from '../../constants';
+import {
+    Fonts,
+    Colors,
+    Styles,
+} from '../../constants';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
+import { TouchableComponent } from '../';
 
 const CartItem = (props: any) => {
-    let MyTouchable: any = TouchableOpacity;
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-        MyTouchable = TouchableNativeFeedback;
-    }
     const { product, quantity, sum } = props;
     return (
         <View style={styles.product}>
@@ -26,7 +23,7 @@ const CartItem = (props: any) => {
                     <Text style={Styles.text}>${sum.toFixed(2)}</Text>
                 </View>
             </View>
-            <MyTouchable
+            <TouchableComponent
                 onPress={props.onPress}
             >
                 <View style={styles.touchable}>
@@ -36,7 +33,7 @@ const CartItem = (props: any) => {
                         size={20}
                     />
                 </View>
-            </MyTouchable>
+            </TouchableComponent>
         </View>
     );
 };

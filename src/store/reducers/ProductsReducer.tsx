@@ -7,7 +7,7 @@ const initState = new ProductsReducerModel(
     DummyProducts.filter(({ ownerId }: Product) => (ownerId === 'u1'))
 );
 
-const ProductsReducer = (state: ProductsReducerModel = initState, action: any) => {
+const ProductsReducer = (state: ProductsReducerModel = { ...initState }, action: any) => {
     switch (action.type) {
         default: return state;
     }

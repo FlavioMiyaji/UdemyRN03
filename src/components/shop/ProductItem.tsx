@@ -4,26 +4,20 @@ import {
     Text,
     Image,
     Button,
-    Platform,
     StyleSheet,
-    TouchableOpacity,
-    TouchableNativeFeedback,
 } from 'react-native';
 import {
-    Colors,
     Fonts,
+    Colors,
     Styles,
 } from '../../constants';
+import { TouchableComponent } from '../';
 
 const ProductItem = (props: any) => {
-    let MyTouchable: any = TouchableOpacity;
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-        MyTouchable = TouchableNativeFeedback;
-    }
     return (
         <View style={styles.product}>
             <View style={styles.touchable}>
-                <MyTouchable
+                <TouchableComponent
                     onPress={props.onViewDetails}
                     useForeground
                 >
@@ -49,7 +43,7 @@ const ProductItem = (props: any) => {
                             />
                         </View>
                     </View>
-                </MyTouchable>
+                </TouchableComponent>
             </View>
         </View>
     );

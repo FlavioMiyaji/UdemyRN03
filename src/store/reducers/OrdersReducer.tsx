@@ -1,14 +1,17 @@
 import OrdersReducerModel from "../model/OrdersReducerModel";
-import { ADD_TO_CART } from "../actions/CartActions";
 import { Order } from "../../models";
+import { ADD_ORDER } from "../actions/OrdersActions";
 
 const initState = new OrdersReducerModel([]);
 
-const OrdersReducer = (state: OrdersReducerModel = initState, action: any) => {
+const OrdersReducer = (state: OrdersReducerModel = { ...initState }, action: any) => {
     switch (action.type) {
-        case ADD_TO_CART: {
+        case ADD_ORDER: {
+            if (!action.payload.totalAmount) {
+                return state;
+            }
             const newOrder = new Order(
-                new Date().toString(),
+                Date.now(),
                 action.payload.items,
                 action.payload.totalAmount,
                 new Date()

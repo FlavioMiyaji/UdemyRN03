@@ -4,10 +4,10 @@ import {
     FlatList,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { Colors, Styles } from '../../constants';
 import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
 import { ProductItem, HeaderButton } from '../../components';
+import { Styles } from '../../constants';
 
 const ProductsOverviewScreen = (props: any) => {
     const products: Product[] = useSelector((state: any) => state.productsReducer.availableProducts);
@@ -41,12 +41,18 @@ const ProductsOverviewScreen = (props: any) => {
 ProductsOverviewScreen.navigationOptions = ({ navigation }: any) => {
     return {
         headerTitle: 'All Products',
-        headerRight: <HeaderButton
+        headerLeft: (<HeaderButton
+            iconName="bars"
+            onPress={() => {
+                navigation.toggleDrawer();
+            }}
+        />),
+        headerRight: (<HeaderButton
             iconName="shopping-cart"
             onPress={() => {
                 navigation.navigate('Cart');
             }}
-        />
+        />),
     };
 };
 

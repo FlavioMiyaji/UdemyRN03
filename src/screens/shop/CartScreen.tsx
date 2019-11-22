@@ -53,7 +53,7 @@ const CartScreen = (props: any) => {
 };
 
 CartScreen.navigationOptions = {
-    headerTitle: 'Cart',
+    headerTitle: 'Your Cart',
 };
 
 const styles = StyleSheet.create({

@@ -1,5 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { Fonts, Colors } from '.';
+import {
+    StyleSheet, Platform,
+} from 'react-native';
+import {
+    Fonts,
+    Colors,
+} from '.';
 
 const Styles = StyleSheet.create({
     screen: {
@@ -7,6 +12,11 @@ const Styles = StyleSheet.create({
         backgroundColor: Colors.background,
         alignItems: 'stretch',
         padding: 10,
+    },
+    title: {
+        fontFamily: Fonts.bold,
+        fontSize: 20,
+        color: Platform.OS === 'android' ? Colors.onPrimary : Colors.primary,
     },
     textContainer: {
         backgroundColor: Colors.onBackground,

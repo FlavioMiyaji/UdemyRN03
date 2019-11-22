@@ -2,20 +2,15 @@ import React from 'react';
 import {
     View,
     Platform,
-    TouchableOpacity,
-    TouchableNativeFeedback,
     StyleSheet,
 } from 'react-native';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import { Colors } from '../../constants';
+import { TouchableComponent } from '../';
 
 const HeaderButton = (props: any) => {
-    let TouchableComp: any = TouchableOpacity;
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-        TouchableComp = TouchableNativeFeedback;
-    }
     return (
-        <TouchableComp
+        <TouchableComponent
             onPress={props.onPress}
             useForeground
         >
@@ -29,7 +24,7 @@ const HeaderButton = (props: any) => {
                     size={20}
                 />
             </View>
-        </TouchableComp>
+        </TouchableComponent>
     );
 };
 
