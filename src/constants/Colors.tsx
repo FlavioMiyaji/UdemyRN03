@@ -53,6 +53,6 @@ const getValue = ({ luminosity }: any) => {
     };
 };
 
-const Colors = getValue({ luminosity: 'light' }).colors; // dark / light
+const Colors = getValue({ luminosity: 'dark' }).colors; // dark / light
 
 export default Colors;

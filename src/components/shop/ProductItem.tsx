@@ -3,8 +3,8 @@ import {
     View,
     Text,
     Image,
-    Button,
     StyleSheet,
+    ImageBackground,
 } from 'react-native';
 import {
     Fonts,
@@ -12,6 +12,7 @@ import {
     Styles,
 } from '../../constants';
 import { TouchableComponent } from '../';
+import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 
 const ProductItem = (props: any) => {
     return (
@@ -22,10 +23,17 @@ const ProductItem = (props: any) => {
                     useForeground
                 >
                     <View>
-                        <Image
-                            style={styles.image}
-                            source={{ uri: props.image }}
-                        />
+                        <ImageBackground
+                            style={styles.imageContainer}
+                            source={require('../../assets/images/photos.png')}
+                            resizeMode="center"
+                        >
+                            <Image
+                                style={styles.image}
+                                source={{ uri: props.image }}
+                                fadeDuration={1000}
+                            />
+                        </ImageBackground>
                         <View style={styles.details}>
                             <Text style={styles.title}>{props.title}</Text>
                             <Text style={styles.price}>${props.price.toFixed(2)}</Text>
@@ -42,7 +50,7 @@ const ProductItem = (props: any) => {
 
 const styles = StyleSheet.create({
     product: {
-        ...Styles.elevation,
+        ...Styles.cart,
         height: 230,
         margin: 10,
     },
@@ -50,9 +58,18 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
     },
-    image: {
+    imageContainer: {
         width: '100%',
         height: '60%',
+    },
+    imageBack: {
+        width: '100%',
+        height: '100%',
+    },
+    image: {
+        zIndex: 1,
+        width: '100%',
+        height: '100%',
     },
     details: {
         alignItems: 'center',

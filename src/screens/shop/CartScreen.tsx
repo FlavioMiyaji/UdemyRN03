@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         backgroundColor: Styles.screen.backgroundColor,
     },
     summary: {
-        ...Styles.elevation,
+        ...Styles.cart,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

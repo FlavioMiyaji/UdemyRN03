@@ -1,11 +1,12 @@
 import React from 'react';
 import {
+    Alert,
+    Button,
     FlatList,
     StyleSheet,
-    Button,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { Colors, Fonts, Styles } from '../../constants';
+import { Colors, Styles } from '../../constants';
 import { Product } from '../../models';
 import { ProductItem, HeaderButton } from '../../components';
 import { deleteProduct } from '../../store/actions/ProductsActions';
@@ -17,9 +18,29 @@ const UserProductsScreen = (props: any) => {
     const editHandler = (product: Product) => {
         props.navigation.navigate('EditProduct', {
             productId: product.id,
-            productTitle: product.title,
         })
     };
+
+    const deleteHandler = (product: Product) => {
+        Alert.alert(
+            'Confirmation',
+            'Do you really want to delete this item?\nThis action cannot be undone.',
+            [
+                {
+                    text: 'No',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Yes',
+                    style: 'destructive',
+                    onPress: () => (
+                        dispatch(deleteProduct(product))
+                    )
+                },
+            ]
+        );
+    };
+
     return (
         <FlatList
             contentContainerStyle={styles.screen}
@@ -45,7 +66,7 @@ const UserProductsScreen = (props: any) => {
                         color={Colors.primary}
                         title="Delete"
                         onPress={() => (
-                            dispatch(deleteProduct(item))
+                            deleteHandler(item)
                         )}
                     />
                 </ProductItem>

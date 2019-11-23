@@ -26,7 +26,22 @@ const Styles = StyleSheet.create({
         fontSize: 16,
         color: Colors.onBackground,
     },
-    elevation: {
+    label: {
+        fontFamily: Fonts.bold,
+        fontSize: 16,
+        color: Colors.onBackground,
+        marginVertical: 8,
+    },
+    input: {
+        fontFamily: Fonts.regular,
+        fontSize: 16,
+        color: Colors.onBackground,
+        borderBottomColor: Colors.onBackground,
+        borderBottomWidth: 1,
+        paddingHorizontal: 2,
+        paddingVertical: 5,
+    },
+    cart: {
         backgroundColor: Colors.surface,
         shadowColor: Colors.onSurface,
         shadowOpacity: 0.2,

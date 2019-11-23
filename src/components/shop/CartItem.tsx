@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     touchable: {
-        ...Styles.elevation,
+        ...Styles.cart,
         backgroundColor: Colors.primaryVariant,
         padding: 10,
         overflow: 'hidden',
