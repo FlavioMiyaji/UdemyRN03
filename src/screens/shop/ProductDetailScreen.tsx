@@ -19,9 +19,6 @@ const ProductDetailScreen = (props: any) => {
     );
     const dispatch = useDispatch();
     return (
-        // <View style={styles.screen}>
-        //     <Text style={styles.title}>{selectedProduct.title}</Text>
-        // </View>
         <ScrollView
             contentContainerStyle={styles.screen}
         >

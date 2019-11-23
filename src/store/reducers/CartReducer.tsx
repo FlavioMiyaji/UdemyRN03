@@ -2,6 +2,7 @@ import CartReducerModel from '../model/CartReducerModel';
 import { Product, CartItem } from '../../models';
 import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions/CartActions';
 import { ADD_ORDER } from '../actions/OrdersActions';
+import { DELETE_PRODUCT } from '../actions/ProductsActions';
 
 const initState = new CartReducerModel([], 0);
 
@@ -27,10 +28,10 @@ const CartReducer = (state: CartReducerModel = { ...initState }, action: any) =>
             };
         }
         case REMOVE_FROM_CART: {
-            const id: string = action.payload;
+            const productId: string = action.payload.id;
 
             const items = [...state.items];
-            let index: number | undefined = items.findIndex(({ product: { id } }) => (id === id));
+            let index: number | undefined = items.findIndex(({ product: { id } }) => (id === productId));
             let price = 0;
             if (index >= 0) {
                 const item = items[index];
@@ -52,6 +53,19 @@ const CartReducer = (state: CartReducerModel = { ...initState }, action: any) =>
         }
         case ADD_ORDER: {
             return initState;
+        }
+        case DELETE_PRODUCT: {
+            const productId = action.payload.id;
+            const items = [...state.items];
+            const foundItem: CartItem | undefined = items.find((cartItem: CartItem) => cartItem.product.id === productId);
+            if (!foundItem) {
+                return state;
+            }
+            return {
+                ...state,
+                items: items.filter((cartItem: CartItem) => cartItem !== foundItem),
+                totalAmount: state.totalAmount - foundItem.sum,
+            };
         }
         default: return state;
     }

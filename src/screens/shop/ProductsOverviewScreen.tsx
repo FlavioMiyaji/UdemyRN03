@@ -2,16 +2,24 @@ import React from 'react';
 import {
     StyleSheet,
     FlatList,
+    Button,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
 import { ProductItem, HeaderButton } from '../../components';
-import { Styles } from '../../constants';
+import { Styles, Colors } from '../../constants';
 
 const ProductsOverviewScreen = (props: any) => {
     const products: Product[] = useSelector((state: any) => state.productsReducer.availableProducts);
     const dispatch = useDispatch();
+
+    const viewDetailsHandler = (product: Product) => (
+        props.navigation.navigate('ProductDetail', {
+            productId: product.id,
+            productTitle: product.title,
+        })
+    );
 
     return (
         <FlatList
@@ -23,16 +31,25 @@ const ProductsOverviewScreen = (props: any) => {
                     image={item.imageUrl}
                     title={item.title}
                     price={item.price}
-                    onViewDetails={() => {
-                        props.navigation.navigate('ProductDetail', {
-                            productId: item.id,
-                            productTitle: item.title,
-                        });
-                    }}
-                    onAddToCart={() => (
-                        dispatch(addToCard(item))
+                    onSelect={() => (
+                        viewDetailsHandler(item)
                     )}
-                />
+                >
+                    <Button
+                        color={Colors.primary}
+                        title="View Details"
+                        onPress={() => (
+                            viewDetailsHandler(item)
+                        )}
+                    />
+                    <Button
+                        color={Colors.primary}
+                        title="Add to Cart"
+                        onPress={() => (
+                            dispatch(addToCard(item))
+                        )}
+                    />
+                </ProductItem>
             )}
         />
     );

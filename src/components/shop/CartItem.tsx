@@ -23,17 +23,19 @@ const CartItem = (props: any) => {
                     <Text style={Styles.text}>${sum.toFixed(2)}</Text>
                 </View>
             </View>
-            <TouchableComponent
-                onPress={props.onPress}
-            >
-                <View style={styles.touchable}>
-                    <Icon
-                        color={Colors.onPrimaryVariant}
-                        name="trash"
-                        size={20}
-                    />
-                </View>
-            </TouchableComponent>
+            {!!props.onRemove && (
+                <TouchableComponent
+                    onPress={props.onRemove}
+                >
+                    <View style={styles.touchable}>
+                        <Icon
+                            color={Colors.onPrimaryVariant}
+                            name="trash"
+                            size={20}
+                        />
+                    </View>
+                </TouchableComponent>
+            )}
         </View>
     );
 };

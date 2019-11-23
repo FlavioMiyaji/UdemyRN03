@@ -1,10 +1,10 @@
-import { CartItem } from "../../models";
+import { CartItem } from '../../models';
 
 export const ADD_ORDER = 'ADD_ORDER';
 
-export const addOrder = (cartItems: CartItem[], totalAmount: number) => {
+export const addOrder = (items: CartItem[], totalAmount: number) => {
     return { type: ADD_ORDER, payload: {
-        cartItems,
+        items,
         totalAmount,
     } }
 };

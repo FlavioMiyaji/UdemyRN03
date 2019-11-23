@@ -8,14 +8,14 @@ import { Order } from '../../models';
 import { OrderItem, HeaderButton } from '../../components';
 
 const OrderScreen = (props: any) => {
-    const orders = useSelector(({ orders }: any) => orders.orders);
+    const orders = useSelector(({ ordersReducer }: any) => ordersReducer.orders);
     return (
         <FlatList
             keyExtractor={({ id }: Order) => String(id)}
             contentContainerStyle={styles.screen}
             data={orders}
-            renderItem={({ item }) => (
-                <OrderItem item={item} />
+            renderItem={({ item: order }) => (
+                <OrderItem order={order} />
             )}
         />
     );

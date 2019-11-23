@@ -21,7 +21,7 @@ const HeaderButton = (props: any) => {
                     solid={props.solid}
                     color={Platform.OS === 'android' ? Colors.onPrimary : Colors.primary}
                     name={props.iconName}
-                    size={20}
+                    size={24}
                 />
             </View>
         </TouchableComponent>

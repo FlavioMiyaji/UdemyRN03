@@ -13,6 +13,8 @@ import {
     ProductDetailScreen,
     CartScreen,
     OrderScreen,
+    UserProductsScreen,
+    EditProductScreen,
 } from '../screens';
 
 const navOptions = (props: any) => {
@@ -30,7 +32,7 @@ const navOptions = (props: any) => {
             solid
             color={tintColor}
             name={props.icon}
-            size={20}
+            size={18}
         />,
     };
 };
@@ -76,10 +78,25 @@ const OrdersNavigator = createStackNavigator(
     }
 );
 
+const AdminNavigator = createStackNavigator(
+    {
+        UserProducts: UserProductsScreen,
+        EditProduct: EditProductScreen,
+    },
+    {
+        navigationOptions: navOptions({
+            label: 'Admin',
+            icon: 'user-shield',
+        }),
+        defaultNavigationOptions: defaultNavOptions,
+    }
+);
+
 const ShopNavigator = createDrawerNavigator(
     {
         Products: ProductsNavigator,
         Orders: OrdersNavigator,
+        Admin: AdminNavigator,
     },
     {
         drawerBackgroundColor: Colors.background,

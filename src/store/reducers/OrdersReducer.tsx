@@ -1,6 +1,6 @@
-import OrdersReducerModel from "../model/OrdersReducerModel";
-import { Order } from "../../models";
-import { ADD_ORDER } from "../actions/OrdersActions";
+import OrdersReducerModel from '../model/OrdersReducerModel';
+import { Order } from '../../models';
+import { ADD_ORDER } from '../actions/OrdersActions';
 
 const initState = new OrdersReducerModel([]);
 

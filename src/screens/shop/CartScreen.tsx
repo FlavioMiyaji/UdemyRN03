@@ -23,7 +23,7 @@ const CartScreen = (props: any) => {
         <View style={styles.screen}>
             <View style={styles.summary}>
                 <Text style={styles.summaryText}>
-                    Total:{' '}<Text style={styles.amount}>${totalAmount.toFixed(2)}</Text>
+                    {'Total: '}<Text style={styles.amount}>${totalAmount.toFixed(2)}</Text>
                 </Text>
                 <Button
                     title="Order Now"
@@ -42,7 +42,7 @@ const CartScreen = (props: any) => {
                         quantity={item.quantity}
                         product={item.product}
                         sum={item.sum}
-                        onPress={() => {
+                        onRemove={() => {
                             dispatch(removeFromCard(item.product.id))
                         }}
                     />

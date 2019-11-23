@@ -8,5 +8,5 @@ export const addToCard = (product: Product) => {
 };
 
 export const removeFromCard = (id: string) => {
-    return ({ type: REMOVE_FROM_CART, payload: id });
+    return ({ type: REMOVE_FROM_CART, payload: { id } });
 };

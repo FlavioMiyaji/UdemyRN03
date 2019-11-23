@@ -1,5 +1,5 @@
 import moment from 'moment';
-import CartItem from "./CartItem";
+import CartItem from './CartItem';
 
 class Order {
     id: number;
