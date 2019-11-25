@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     screen: {
         ...Styles.screen,
         flex: 0,
+        flexGrow: 1,
     },
 });
 

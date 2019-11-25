@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     StyleSheet,
     FlatList,
@@ -9,10 +9,15 @@ import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
 import { ProductItem, HeaderButton } from '../../components';
 import { Styles, Colors } from '../../constants';
+import { fetchProducts } from '../../store/actions/ProductsActions';
 
 const ProductsOverviewScreen = (props: any) => {
     const products: Product[] = useSelector((state: any) => state.productsReducer.availableProducts);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
 
     const viewDetailsHandler = (product: Product) => (
         props.navigation.navigate('ProductDetail', {
@@ -77,6 +82,7 @@ const styles = StyleSheet.create({
     screen: {
         ...Styles.screen,
         flex: 0,
+        flexGrow: 1,
     },
 });
 

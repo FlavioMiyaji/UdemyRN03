@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect, useReducer } from 'react';
 import {
-    Text,
     View,
-    TextInput,
+    Alert,
     StyleSheet,
     ScrollView,
-    Alert,
+    KeyboardAvoidingView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Styles } from '../../constants';
@@ -140,6 +139,11 @@ const EditProductScreen = (props: any) => {
     }, [dispatchFormState]);
 
     return (
+        // <KeyboardAvoidingView
+        //     style={{ flex: 1 }}
+        //     behavior="padding"
+        //     keyboardVerticalOffset={100}
+        // >
         <ScrollView
             contentContainerStyle={styles.form}
         >
@@ -194,6 +198,7 @@ const EditProductScreen = (props: any) => {
                 />
             </View>
         </ScrollView>
+        // </KeyboardAvoidingView>
     );
 };
 

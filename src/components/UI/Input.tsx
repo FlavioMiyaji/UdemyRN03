@@ -110,7 +110,11 @@ const Input = (props: InputProps) => {
 
     return (
         <View style={styles.formControl}>
-            <Text style={styles.label}>{props.label}</Text>
+            <Text style={styles.label}>
+                {props.label}{props.required && (
+                    <Text style={styles.labelRequired}>{' *'}</Text>
+                )}
+            </Text>
             <TextInput
                 {...props}
                 style={styles.input}
@@ -118,8 +122,10 @@ const Input = (props: InputProps) => {
                 onChangeText={textChangeHandler}
                 onBlur={lostFocusHandler}
             />
-            {!inputState.valid && (
-                <Text style={styles.error}>{props.errorText}</Text>
+            {!inputState.valid && inputState.touched && (
+                <View style={styles.errorContainer}>
+                    <Text style={styles.error}>{props.errorText}</Text>
+                </View>
             )}
         </View>
     );
@@ -135,9 +141,15 @@ const styles = StyleSheet.create({
         color: Colors.onBackground,
         marginVertical: 8,
     },
+    labelRequired: {
+        color: Colors.error,
+    },
+    errorContainer: {
+        marginVertical: 5,
+    },
     error: {
         fontFamily: Fonts.regular,
-        fontSize: 16,
+        fontSize: 13,
         color: Colors.error,
     },
     input: {

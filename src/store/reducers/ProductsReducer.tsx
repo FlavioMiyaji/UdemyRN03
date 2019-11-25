@@ -1,7 +1,12 @@
 import ProductsReducerModel from '../model/ProductsReducerModel';
 import DummyProducts from '../../data/dummy-data';
 import { Product } from '../../models';
-import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT } from '../actions/ProductsActions';
+import {
+    SET_PRODUCTS,
+    DELETE_PRODUCT,
+    CREATE_PRODUCT,
+    UPDATE_PRODUCT,
+} from '../actions/ProductsActions';
 
 const initState = new ProductsReducerModel(
     DummyProducts,
@@ -27,10 +32,18 @@ const updateProducts = (list: Product[], product: Product) => {
 
 const ProductsReducer = (state: ProductsReducerModel = { ...initState }, action: any) => {
     switch (action.type) {
+        case SET_PRODUCTS: {
+            const products: Product[] = action.payload;
+            return {
+                ...state,
+                availableProducts: products,
+                userProducts: products.filter(({ ownerId }: Product) => (ownerId === 'u1')),
+            }
+        }
         case CREATE_PRODUCT: {
             const payload: Product = action.payload;
             const newProduct: Product = new Product(
-                String(Date.now()),
+                payload.id,
                 'u1',
                 payload.title,
                 payload.imageUrl,

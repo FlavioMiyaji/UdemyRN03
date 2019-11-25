@@ -7,6 +7,7 @@ import {
 import {
   createStore,
   combineReducers,
+  applyMiddleware,
 } from 'redux';
 import { Provider } from 'react-redux';
 import ProductsReducer from './store/reducers/ProductsReducer';
@@ -14,6 +15,7 @@ import { Colors } from './constants';
 import ShopNavigator from './navigation/ShopNavigator';
 import CartReducer from './store/reducers/CartReducer';
 import OrdersReducer from './store/reducers/OrdersReducer';
+import ReduxThunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
   productsReducer: ProductsReducer,
@@ -21,7 +23,7 @@ const rootReducer = combineReducers({
   ordersReducer: OrdersReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const App = () => {
   return (
