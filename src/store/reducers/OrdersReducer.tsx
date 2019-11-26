@@ -1,24 +1,34 @@
 import OrdersReducerModel from '../model/OrdersReducerModel';
 import { Order } from '../../models';
-import { ADD_ORDER } from '../actions/OrdersActions';
+import { ADD_ORDER, SET_ORDERS } from '../actions/OrdersActions';
 
-const initState = new OrdersReducerModel([]);
+interface State {
+    orders: Order[];
+}
 
-const OrdersReducer = (state: OrdersReducerModel = { ...initState }, action: any) => {
+type Action =
+    | { type: 'ADD_ORDER', payload: Order }
+    | { type: 'SET_ORDERS', payload: Order[] }
+    ;
+
+const initState = {
+    orders: [],
+};
+
+const OrdersReducer = (state: State = { ...initState }, action: Action) => {
     switch (action.type) {
-        case ADD_ORDER: {
-            if (!action.payload.totalAmount) {
-                return state;
-            }
-            const newOrder = new Order(
-                Date.now(),
-                action.payload.items,
-                action.payload.totalAmount,
-                new Date()
-            );
+        case SET_ORDERS: {
+            const { payload } = action;
             return {
                 ...state,
-                orders: state.orders.concat(newOrder),
+                orders: payload,
+            };
+        }
+        case ADD_ORDER: {
+            const { payload } = action;
+            return {
+                ...state,
+                orders: state.orders.concat(payload),
             };
         }
         default: return state;

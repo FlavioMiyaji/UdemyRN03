@@ -1,5 +1,4 @@
 import ProductsReducerModel from '../model/ProductsReducerModel';
-import DummyProducts from '../../data/dummy-data';
 import { Product } from '../../models';
 import {
     SET_PRODUCTS,
@@ -9,8 +8,8 @@ import {
 } from '../actions/ProductsActions';
 
 const initState = new ProductsReducerModel(
-    DummyProducts,
-    DummyProducts.filter(({ ownerId }: Product) => (ownerId === 'u1'))
+    [],
+    []
 );
 
 const updateProducts = (list: Product[], product: Product) => {

@@ -2,12 +2,13 @@ import React, { useState, useCallback, useEffect, useReducer } from 'react';
 import {
     View,
     Alert,
+    Keyboard,
     StyleSheet,
     ScrollView,
-    KeyboardAvoidingView,
+    ActivityIndicator,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { Styles } from '../../constants';
+import { Styles, Colors } from '../../constants';
 import { Product } from '../../models';
 import { HeaderButton, Input } from '../../components';
 import { updateProduct, createProduct } from '../../store/actions/ProductsActions';
@@ -15,23 +16,23 @@ import { updateProduct, createProduct } from '../../store/actions/ProductsAction
 const FORM_UPDATE = 'FORM_UPDATE';
 
 interface InputValues {
-    title: string,
-    imageUrl: string,
-    price: string,
-    description: string,
+    title: string;
+    imageUrl: string;
+    price: string;
+    description: string;
 }
 
 interface InputValids {
-    title: boolean,
-    imageUrl: boolean,
-    price: boolean,
-    description: boolean,
+    title: boolean;
+    imageUrl: boolean;
+    price: boolean;
+    description: boolean;
 }
 
 interface State {
-    inputValues: InputValues,
-    inputValids: InputValids,
-    formValid: boolean,
+    inputValues: InputValues;
+    inputValids: InputValids;
+    formValid: boolean;
 }
 
 type Action =
@@ -41,9 +42,9 @@ type Action =
 const formReducer = (state: State, action: Action) => {
     switch (action.type) {
         case FORM_UPDATE: {
-            const { payload: { id: input, value, valid } } = action;
-            const inputValues: InputValues = { ...state.inputValues, [input]: value };
-            const inputValids: InputValids = { ...state.inputValids, [input]: valid };
+            const { payload: { id, value, valid } } = action;
+            const inputValues: InputValues = { ...state.inputValues, [id]: value };
+            const inputValids: InputValids = { ...state.inputValids, [id]: valid };
             let formValid = inputValids.title
                 && inputValids.imageUrl
                 && inputValids.price
@@ -61,6 +62,8 @@ const formReducer = (state: State, action: Action) => {
 };
 
 const EditProductScreen = (props: any) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState();
     const { navigation } = props;
     const productId = navigation.getParam('productId');
     let selectedProduct: Product | undefined = undefined;
@@ -88,39 +91,50 @@ const EditProductScreen = (props: any) => {
 
     const dispatch = useDispatch();
     const submitHandler = useCallback(() => {
-        if (!formState.formValid) {
-            Alert.alert(
-                'Wrong input!',
-                'Please check the errors in the form.',
-                [
-                    { text: 'Okay' },
-                ],
-            );
-            return;
-        }
-        const { title, imageUrl, price, description } = formState.inputValues;
-        if (selectedProduct) {
-            dispatch(
-                updateProduct({
-                    ...selectedProduct,
-                    title,
-                    imageUrl,
-                    description,
-                })
-            );
-        } else {
-            dispatch(
-                createProduct({
-                    id: '',
-                    ownerId: 'u1',
-                    title,
-                    imageUrl,
-                    price: +price,
-                    description,
-                })
-            );
-        }
-        navigation.goBack();
+        Keyboard.dismiss();
+        setError(null);
+        setLoading(true);
+        setTimeout(async () => {
+            if (!formState.formValid) {
+                setLoading(false);
+                Alert.alert(
+                    'Wrong input!',
+                    'Please check the errors in the form.',
+                    [
+                        { text: 'Okay' },
+                    ],
+                );
+                return;
+            }
+            const { title, imageUrl, price, description } = formState.inputValues;
+            try {
+                if (selectedProduct) {
+                    await dispatch(
+                        updateProduct({
+                            ...selectedProduct,
+                            title,
+                            imageUrl,
+                            description,
+                        })
+                    );
+                } else {
+                    await dispatch(
+                        createProduct({
+                            id: '',
+                            ownerId: 'u1',
+                            title,
+                            imageUrl,
+                            price: +price,
+                            description,
+                        })
+                    );
+                }
+                navigation.goBack();
+            } catch (error) {
+                setError(error.message);
+            }
+            setLoading(false);
+        }, 1000);
     }, [
         dispatch,
         selectedProduct,
@@ -131,13 +145,37 @@ const EditProductScreen = (props: any) => {
         navigation.setParams({ submit: submitHandler });
     }, [submitHandler]);
 
-    const inputChangeHandler = useCallback(({ input, value, valid }: any) => {
+    const inputChangeHandler = useCallback(({ id, value, valid }: any) => {
         dispatchFormState({
             type: FORM_UPDATE,
-            payload: { input, value, valid }
+            payload: { id, value, valid }
         });
     }, [dispatchFormState]);
 
+    useEffect(() => {
+        if (error) {
+            Alert.alert(
+                'An error ocurred!',
+                error,
+                [
+                    {
+                        text: 'Okay'
+                    },
+                ],
+            );
+        }
+    }, [error]);
+
+    if (loading) {
+        return (
+            <View style={styles.centered}>
+                <ActivityIndicator
+                    size="large"
+                    color={Colors.primary}
+                />
+            </View>
+        );
+    }
     return (
         // <KeyboardAvoidingView
         //     style={{ flex: 1 }}
@@ -224,6 +262,12 @@ const styles = StyleSheet.create({
     },
     formControl: {
         width: '100%'
+    },
+    centered: {
+        ...Styles.screen,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 30,
     },
 });
 

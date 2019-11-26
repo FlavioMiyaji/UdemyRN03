@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
     Text,
     View,
+    Alert,
     Button,
     FlatList,
+    Keyboard,
     StyleSheet,
-    ListRenderItem,
+    ActivityIndicator,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Colors, Fonts, Styles } from '../../constants';
@@ -15,9 +17,39 @@ import { removeFromCard } from '../../store/actions/CartActions';
 import { addOrder } from '../../store/actions/OrdersActions';
 
 const CartScreen = (props: any) => {
+    const { navigation } = props;
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState();
     const items: CartItem[] = useSelector((state: any) => state.cartReducer.items);
     const totalAmount: number = useSelector((state: any) => state.cartReducer.totalAmount);
     const dispatch = useDispatch();
+
+    const sendOrderHandler = useCallback(async () => {
+        Keyboard.dismiss();
+        setError(null);
+        setLoading(true);
+        try {
+            await dispatch(addOrder(items, totalAmount));
+            navigation.goBack();
+        } catch (error) {
+            setError(error.message);
+        }
+        setLoading(false);
+    }, [dispatch, setError, setLoading]);
+
+    useEffect(() => {
+        if (error) {
+            Alert.alert(
+                'An error ocurred!',
+                error,
+                [
+                    {
+                        text: 'Okay'
+                    },
+                ],
+            );
+        }
+    }, [error]);
 
     return (
         <View style={styles.screen}>
@@ -25,13 +57,18 @@ const CartScreen = (props: any) => {
                 <Text style={styles.summaryText}>
                     {'Total: '}<Text style={styles.amount}>${totalAmount.toFixed(2)}</Text>
                 </Text>
-                <Button
-                    title="Order Now"
-                    color={Colors.primary}
-                    onPress={() => {
-                        dispatch(addOrder(items, totalAmount));
-                    }}
-                />
+                {loading ? (
+                    <ActivityIndicator
+                        size="small"
+                        color={Colors.primary}
+                    />
+                ) : (
+                        <Button
+                            title="Order Now"
+                            color={Colors.primary}
+                            onPress={sendOrderHandler}
+                        />
+                    )}
             </View>
             <FlatList
                 contentContainerStyle={{ padding: 10 }}
@@ -77,6 +114,12 @@ const styles = StyleSheet.create({
         ...Styles.text,
         fontFamily: Fonts.bold,
         color: Colors.secondary,
+    },
+    centered: {
+        ...Styles.screen,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 30,
     },
 });
 

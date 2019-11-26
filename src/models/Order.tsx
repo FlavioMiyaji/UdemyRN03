@@ -2,12 +2,12 @@ import moment from 'moment';
 import CartItem from './CartItem';
 
 class Order {
-    id: number;
+    id: string;
     items: CartItem[];
     totalAmount: number;
     date: Date;
 
-    constructor(id: number,
+    constructor(id: string,
         items: CartItem[],
         totalAmount: number,
         date: Date) {
