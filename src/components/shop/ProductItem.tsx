@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -14,12 +14,20 @@ import {
 import { TouchableComponent } from '../';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 
-const ProductItem = (props: any) => {
+interface Props {
+    onSelect: Function;
+    image: string;
+    title: string;
+    price: number;
+    children: Element;
+}
+
+const ProductItem = (props: Props) => {
     return (
         <View style={styles.product}>
             <View style={styles.touchable}>
                 <TouchableComponent
-                    onPress={props.onSelect}
+                    onPress={() => props.onSelect()}
                     useForeground
                 >
                     <View>

@@ -8,7 +8,13 @@ import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import { Colors } from '../../constants';
 import { TouchableComponent } from '../';
 
-const HeaderButton = (props: any) => {
+interface Props {
+    onPress: Function;
+    solid?: boolean;
+    iconName: string;
+}
+
+const HeaderButton = (props: Props) => {
     return (
         <TouchableComponent
             onPress={props.onPress}

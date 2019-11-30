@@ -1,18 +1,40 @@
-import React from 'react';
+import React, {
+    RefObject,
+    createRef,
+} from 'react';
 import {
     Alert,
     Button,
     FlatList,
     StyleSheet,
+    View,
 } from 'react-native';
+import {
+    NavigationState,
+    NavigationParams,
+    NavigationScreenProp,
+} from 'react-navigation';
+import Toast from 'react-native-easy-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { Colors, Styles } from '../../constants';
 import { Product } from '../../models';
 import { ProductItem, HeaderButton } from '../../components';
 import { deleteProduct } from '../../store/actions/ProductsActions';
+import { ReducersState } from '../../App';
 
-const UserProductsScreen = (props: any) => {
-    const userProducts = useSelector(({ productsReducer }: any) => productsReducer.userProducts);
+type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
+
+interface Props {
+    navigation: Navigation;
+}
+
+interface NavigationOptionsProps {
+    navigation: Navigation;
+}
+
+const UserProductsScreen = (props: Props) => {
+    const toastRef: RefObject<Toast> = createRef();
+    const userProducts = useSelector(({ productsReducer }: ReducersState) => productsReducer.userProducts);
     const dispatch = useDispatch();
 
     const editHandler = (product: Product) => {
@@ -33,49 +55,55 @@ const UserProductsScreen = (props: any) => {
                 {
                     text: 'Yes',
                     style: 'destructive',
-                    onPress: () => (
-                        dispatch(deleteProduct(product))
-                    )
+                    onPress: () => {
+                        dispatch(deleteProduct(product));
+                        if (toastRef.current) {
+                            toastRef.current.show(`The product was deleted!`);
+                        }
+                    },
                 },
             ]
         );
     };
 
     return (
-        <FlatList
-            contentContainerStyle={styles.screen}
-            data={userProducts}
-            keyExtractor={(item: Product) => item.id}
-            renderItem={({ item }) => (
-                <ProductItem
-                    image={item.imageUrl}
-                    title={item.title}
-                    price={item.price}
-                    onSelect={() => (
-                        editHandler(item)
-                    )}
-                >
-                    <Button
-                        color={Colors.primary}
-                        title="Edit"
-                        onPress={() => (
+        <View style={{ flex: 1 }}>
+            <Toast ref={toastRef} />
+            <FlatList
+                contentContainerStyle={styles.screen}
+                data={userProducts}
+                keyExtractor={(item: Product) => item.id}
+                renderItem={({ item }) => (
+                    <ProductItem
+                        image={item.imageUrl}
+                        title={item.title}
+                        price={item.price}
+                        onSelect={() => (
                             editHandler(item)
                         )}
-                    />
-                    <Button
-                        color={Colors.primary}
-                        title="Delete"
-                        onPress={() => (
-                            deleteHandler(item)
-                        )}
-                    />
-                </ProductItem>
-            )}
-        />
+                    >
+                        <Button
+                            color={Colors.primary}
+                            title="Edit"
+                            onPress={() => (
+                                editHandler(item)
+                            )}
+                        />
+                        <Button
+                            color={Colors.primary}
+                            title="Delete"
+                            onPress={() => (
+                                deleteHandler(item)
+                            )}
+                        />
+                    </ProductItem>
+                )}
+            />
+        </View>
     );
 };
 
-UserProductsScreen.navigationOptions = ({ navigation }: any) => {
+UserProductsScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) => {
     return {
         headerTitle: 'Your Products',
         headerLeft: (

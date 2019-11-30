@@ -11,9 +11,22 @@ import {
 } from '../../constants';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import { TouchableComponent } from '../';
+import { Product } from 'src/models';
 
-const CartItem = (props: any) => {
-    const { product, quantity, sum } = props;
+interface Props {
+    product: Product;
+    quantity: number;
+    sum: number;
+    onRemove?: Function;
+}
+
+const CartItem = (props: Props) => {
+    const {
+        sum,
+        product,
+        quantity,
+        onRemove,
+    } = props;
     return (
         <View style={styles.product}>
             <View style={{ flex: 1, marginRight: 10 }}>
@@ -23,9 +36,9 @@ const CartItem = (props: any) => {
                     <Text style={Styles.text}>${sum.toFixed(2)}</Text>
                 </View>
             </View>
-            {!!props.onRemove && (
+            {!!onRemove && (
                 <TouchableComponent
-                    onPress={props.onRemove}
+                    onPress={onRemove}
                 >
                     <View style={styles.touchable}>
                         <Icon

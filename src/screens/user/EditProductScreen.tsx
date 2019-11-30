@@ -1,4 +1,9 @@
-import React, { useState, useCallback, useEffect, useReducer } from 'react';
+import React, {
+    useState,
+    useCallback,
+    useEffect,
+    useReducer,
+} from 'react';
 import {
     View,
     Alert,
@@ -7,11 +12,27 @@ import {
     ScrollView,
     ActivityIndicator,
 } from 'react-native';
+import {
+    NavigationScreenProp,
+    NavigationState,
+    NavigationParams,
+} from 'react-navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { Styles, Colors } from '../../constants';
 import { Product } from '../../models';
 import { HeaderButton, Input } from '../../components';
 import { updateProduct, createProduct } from '../../store/actions/ProductsActions';
+import { ReducersState } from '../../App';
+
+type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
+
+interface Props {
+    navigation: Navigation;
+}
+
+interface NavigationOptionsProps {
+    navigation: Navigation;
+}
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -61,14 +82,14 @@ const formReducer = (state: State, action: Action) => {
     }
 };
 
-const EditProductScreen = (props: any) => {
+const EditProductScreen = (props: Props) => {
+    const { navigation } = props;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
-    const { navigation } = props;
     const productId = navigation.getParam('productId');
     let selectedProduct: Product | undefined = undefined;
     if (productId) {
-        selectedProduct = useSelector((state: any) =>
+        selectedProduct = useSelector((state: ReducersState) =>
             state.productsReducer.availableProducts.find(({ id }: Product) => id === productId)
         );
     }
@@ -145,7 +166,11 @@ const EditProductScreen = (props: any) => {
         navigation.setParams({ submit: submitHandler });
     }, [submitHandler]);
 
-    const inputChangeHandler = useCallback(({ id, value, valid }: any) => {
+    const inputChangeHandler = useCallback(({ id, value, valid }: {
+        id: string;
+        value: string;
+        valid: boolean;
+    }) => {
         dispatchFormState({
             type: FORM_UPDATE,
             payload: { id, value, valid }
@@ -240,7 +265,7 @@ const EditProductScreen = (props: any) => {
     );
 };
 
-EditProductScreen.navigationOptions = ({ navigation }: any) => {
+EditProductScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) => {
     const productId = navigation.getParam('productId');
     const submit: Function = navigation.getParam('submit');
     return {

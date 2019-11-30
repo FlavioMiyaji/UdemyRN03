@@ -6,7 +6,7 @@ import {
     Red,
 } from './palettes';
 
-const getValue = ({ luminosity }: any) => {
+const getValue = ({ luminosity }: { luminosity: string; }) => {
     const dark = {
         main: BlueGray.c800,
         variant: BlueGray.c500,

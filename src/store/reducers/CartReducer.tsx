@@ -1,12 +1,26 @@
-import CartReducerModel from '../model/CartReducerModel';
 import { Product, CartItem } from '../../models';
 import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions/CartActions';
 import { ADD_ORDER } from '../actions/OrdersActions';
 import { DELETE_PRODUCT } from '../actions/ProductsActions';
 
-const initState = new CartReducerModel([], 0);
+export interface State {
+    items: CartItem[];
+    totalAmount: number;
+}
 
-const CartReducer = (state: CartReducerModel = { ...initState }, action: any) => {
+type Action =
+    | { type: 'ADD_TO_CART', payload: Product }
+    | { type: 'REMOVE_FROM_CART', payload: Product }
+    | { type: 'ADD_ORDER' }
+    | { type: 'DELETE_PRODUCT', payload: Product }
+    ;
+
+const initState = {
+    items: [],
+    totalAmount: 0,
+};
+
+const CartReducer = (state: State = { ...initState }, action: Action) => {
     switch (action.type) {
         case ADD_TO_CART: {
             const product: Product = action.payload;

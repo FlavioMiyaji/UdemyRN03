@@ -1,4 +1,3 @@
-import ProductsReducerModel from '../model/ProductsReducerModel';
 import { Product } from '../../models';
 import {
     SET_PRODUCTS,
@@ -7,29 +6,24 @@ import {
     UPDATE_PRODUCT,
 } from '../actions/ProductsActions';
 
-const initState = new ProductsReducerModel(
-    [],
-    []
-);
-
-const updateProducts = (list: Product[], product: Product) => {
-    const cloneList = [...list];
-    const index: number | undefined = cloneList.findIndex(
-        ({ id }: Product) => id === product.id
-    );
-    const updatedProduct = new Product(
-        product.id,
-        cloneList[index].ownerId,
-        product.title,
-        product.imageUrl,
-        product.description,
-        cloneList[index].price,
-    );
-    cloneList[index] = updatedProduct;
-    return cloneList;
+export interface State {
+    availableProducts: Product[];
+    userProducts: Product[];
 }
 
-const ProductsReducer = (state: ProductsReducerModel = { ...initState }, action: any) => {
+type Action =
+    | { type: 'SET_PRODUCTS', payload: Product[] }
+    | { type: 'CREATE_PRODUCT', payload: Product }
+    | { type: 'UPDATE_PRODUCT', payload: Product }
+    | { type: 'DELETE_PRODUCT', payload: Product }
+    ;
+
+const initState = {
+    availableProducts: [],
+    userProducts: [],
+};
+
+const ProductsReducer = (state: State = { ...initState }, action: Action) => {
     switch (action.type) {
         case SET_PRODUCTS: {
             const products: Product[] = action.payload;
@@ -74,5 +68,22 @@ const ProductsReducer = (state: ProductsReducerModel = { ...initState }, action:
         default: return state;
     }
 };
+
+const updateProducts = (list: Product[], product: Product) => {
+    const cloneList = [...list];
+    const index: number | undefined = cloneList.findIndex(
+        ({ id }: Product) => id === product.id
+    );
+    const updatedProduct = new Product(
+        product.id,
+        cloneList[index].ownerId,
+        product.title,
+        product.imageUrl,
+        product.description,
+        cloneList[index].price,
+    );
+    cloneList[index] = updatedProduct;
+    return cloneList;
+}
 
 export default ProductsReducer;

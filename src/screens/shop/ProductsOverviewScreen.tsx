@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+    useState,
+    useEffect,
+    createRef,
+    RefObject,
+    useCallback,
+} from 'react';
 import {
     View,
     Text,
@@ -7,19 +13,36 @@ import {
     StyleSheet,
     ActivityIndicator,
 } from 'react-native';
+import {
+    NavigationState,
+    NavigationParams,
+    NavigationScreenProp,
+} from 'react-navigation';
+import Toast from 'react-native-easy-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
 import { ProductItem, HeaderButton } from '../../components';
 import { Styles, Colors } from '../../constants';
 import { fetchProducts } from '../../store/actions/ProductsActions';
+import { ReducersState } from '../../App';
 
-const ProductsOverviewScreen = (props: any) => {
+type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
+
+interface Props {
+    navigation: Navigation;
+}
+
+interface NavigationOptionsProps {
+    navigation: Navigation;
+}
+
+const ProductsOverviewScreen = (props: Props) => {
     const { navigation } = props;
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState();
-    const products: Product[] = useSelector((state: any) => state.productsReducer.availableProducts);
+    const products: Product[] = useSelector(({ productsReducer }: ReducersState) => productsReducer.availableProducts);
     const dispatch = useDispatch();
 
     const loadProducts = useCallback(async () => {
@@ -46,13 +69,6 @@ const ProductsOverviewScreen = (props: any) => {
             setLoading(false);
         });
     }, [dispatch, loadProducts]);
-
-    const viewDetailsHandler = (product: Product) => (
-        navigation.navigate('ProductDetail', {
-            productId: product.id,
-            productTitle: product.title,
-        })
-    );
     if (error) {
         return (
             <View style={styles.centered}>
@@ -82,43 +98,59 @@ const ProductsOverviewScreen = (props: any) => {
         );
     }
 
+    const toastRef: RefObject<Toast> = createRef();
+    const viewDetailsHandler = (product: Product) => (
+        navigation.navigate('ProductDetail', {
+            productId: product.id,
+            productTitle: product.title,
+        })
+    );
+    const addCartHandler = (product: Product) => {
+        dispatch(addToCard(product));
+        if (toastRef.current) {
+            toastRef.current.show(`The ${product.title} was add to the cart.`);
+        }
+    };
     return (
-        <FlatList
-            onRefresh={loadProducts}
-            refreshing={refreshing}
-            keyExtractor={({ id }: Product) => (id)}
-            contentContainerStyle={styles.screen}
-            data={products}
-            renderItem={({ item }) => (
-                <ProductItem
-                    image={item.imageUrl}
-                    title={item.title}
-                    price={item.price}
-                    onSelect={() => (
-                        viewDetailsHandler(item)
-                    )}
-                >
-                    <Button
-                        color={Colors.primary}
-                        title="View Details"
-                        onPress={() => (
+        <View style={{ flex: 1 }}>
+            <Toast ref={toastRef} />
+            <FlatList
+                onRefresh={loadProducts}
+                refreshing={refreshing}
+                keyExtractor={({ id }: Product) => (id)}
+                contentContainerStyle={styles.screen}
+                data={products}
+                renderItem={({ item }) => (
+                    <ProductItem
+                        image={item.imageUrl}
+                        title={item.title}
+                        price={item.price}
+                        onSelect={() => (
                             viewDetailsHandler(item)
                         )}
-                    />
-                    <Button
-                        color={Colors.primary}
-                        title="Add to Cart"
-                        onPress={() => (
-                            dispatch(addToCard(item))
-                        )}
-                    />
-                </ProductItem>
-            )}
-        />
+                    >
+                        <Button
+                            color={Colors.primary}
+                            title="View Details"
+                            onPress={() => (
+                                viewDetailsHandler(item)
+                            )}
+                        />
+                        <Button
+                            color={Colors.primary}
+                            title="Add to Cart"
+                            onPress={() => (
+                                addCartHandler(item)
+                            )}
+                        />
+                    </ProductItem>
+                )}
+            />
+        </View>
     );
 };
 
-ProductsOverviewScreen.navigationOptions = ({ navigation }: any) => {
+ProductsOverviewScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) => {
     return {
         headerTitle: 'All Products',
         headerLeft: (<HeaderButton

@@ -15,9 +15,13 @@ import { CartItem as CartItemComp } from '../../components';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import TouchableComponent from '../UI/TouchableComponent';
 
-const OrderItem = (props: any) => {
+interface Props {
+    order: Order;
+}
+
+const OrderItem = (props: Props) => {
+    const { order } = props;
     const [showDetails, setShowDetails] = useState(false);
-    const order: Order = props.order;
     const { totalAmount, readableDate, items = [] } = order;
     return (
         <View style={styles.order}>

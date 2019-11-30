@@ -17,9 +17,14 @@ import {
     EditProductScreen,
 } from '../screens';
 
-const navOptions = (props: any) => {
+interface NavOptionsProps {
+    label: string;
+    icon: string;
+}
+
+const navOptions = (props: NavOptionsProps) => {
     return {
-        drawerLabel: ({ tintColor }: any) => (
+        drawerLabel: ({ tintColor }: { tintColor: string; }) => (
             <Text
                 style={{
                     ...Styles.title,
@@ -28,12 +33,14 @@ const navOptions = (props: any) => {
                 }}
             >{props.label}</Text>
         ),
-        drawerIcon: ({ tintColor }: any) => <Icon
-            solid
-            color={tintColor}
-            name={props.icon}
-            size={18}
-        />,
+        drawerIcon: ({ tintColor }: { tintColor: string; }) => (
+            <Icon
+                solid
+                color={tintColor}
+                name={props.icon}
+                size={18}
+            />
+        ),
     };
 };
 

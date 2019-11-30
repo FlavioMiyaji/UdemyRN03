@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {
+    RefObject,
+    createRef,
+} from 'react';
 import {
     Text,
     View,
@@ -7,21 +10,47 @@ import {
     ScrollView,
     StyleSheet,
 } from 'react-native';
+import {
+    NavigationScreenProp,
+    NavigationState,
+    NavigationParams,
+} from 'react-navigation';
 import { useSelector, useDispatch } from 'react-redux';
+import Toast from 'react-native-easy-toast';
 import { Colors, Fonts, Styles } from '../../constants';
 import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
+import { ReducersState } from '../../App';
 
-const ProductDetailScreen = (props: any) => {
+type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
+
+interface Props {
+    navigation: Navigation;
+}
+
+interface NavigationOptionsProps {
+    navigation: Navigation;
+}
+
+const ProductDetailScreen = (props: Props) => {
     const productId = props.navigation.getParam('productId');
-    const selectedProduct: Product = useSelector((state: any) =>
-        state.productsReducer.availableProducts.find(({ id }: Product) => id === productId)
+    const selectedProduct: Product | undefined = useSelector(({ productsReducer }: ReducersState) =>
+        productsReducer.availableProducts.find(({ id }: Product) => id === productId)
     );
+    const toastRef: RefObject<Toast> = createRef();
     const dispatch = useDispatch();
+    if (!selectedProduct) {
+        return (
+            <View style={styles.centered}>
+                <Text style={Styles.text}>No product found.</Text>
+            </View>
+        );
+    }
     return (
         <ScrollView
             contentContainerStyle={styles.screen}
         >
+            <Toast ref={toastRef} />
             <Image
                 style={styles.image}
                 source={{ uri: selectedProduct.imageUrl }}
@@ -30,9 +59,12 @@ const ProductDetailScreen = (props: any) => {
                 <Button
                     color={Colors.primary}
                     title="Add to Cart"
-                    onPress={() => (
-                        dispatch(addToCard(selectedProduct))
-                    )}
+                    onPress={() => {
+                        dispatch(addToCard(selectedProduct));
+                        if (toastRef.current) {
+                            toastRef.current.show(`The ${selectedProduct.title} was add to the cart.`);
+                        }
+                    }}
                 />
             </View>
             <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
@@ -41,7 +73,7 @@ const ProductDetailScreen = (props: any) => {
     );
 };
 
-ProductDetailScreen.navigationOptions = ({ navigation }: any) => {
+ProductDetailScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) => {
     const productTitle = navigation.getParam('productTitle');
     return {
         headerTitle: productTitle,
@@ -77,6 +109,12 @@ const styles = StyleSheet.create({
         ...Styles.text,
         marginVertical: 10,
         marginHorizontal: 20,
+    },
+    centered: {
+        ...Styles.screen,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 30,
     },
 });
 

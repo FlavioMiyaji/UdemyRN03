@@ -1,19 +1,44 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+    useState,
+    useCallback,
+    useEffect,
+} from 'react';
 import {
-    FlatList, Text, StyleSheet, View, Button, ActivityIndicator,
+    Text,
+    View,
+    Button,
+    FlatList,
+    StyleSheet,
+    ActivityIndicator,
 } from 'react-native';
+import {
+    NavigationScreenProp,
+    NavigationState,
+    NavigationParams,
+} from 'react-navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { Styles, Colors } from '../../constants';
 import { Order } from '../../models';
 import { OrderItem, HeaderButton } from '../../components';
 import { fetchOrders } from '../../store/actions/OrdersActions';
+import { ReducersState } from '../../App';
 
-const OrderScreen = (props: any) => {
+type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
+
+interface Props {
+    navigation: Navigation;
+}
+
+interface NavigationOptionsProps {
+    navigation: Navigation;
+}
+
+const OrderScreen = (props: Props) => {
     const { navigation } = props;
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState();
-    const orders = useSelector(({ ordersReducer }: any) => ordersReducer.orders);
+    const orders = useSelector(({ ordersReducer }: ReducersState) => ordersReducer.orders);
 
     const dispatch = useDispatch();
 
@@ -76,7 +101,7 @@ const OrderScreen = (props: any) => {
     );
 };
 
-OrderScreen.navigationOptions = ({ navigation }: any) => {
+OrderScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) => {
     return {
         headerTitle: 'Your Orders',
         headerLeft: (<HeaderButton

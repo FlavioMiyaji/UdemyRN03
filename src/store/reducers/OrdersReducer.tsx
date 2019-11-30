@@ -1,8 +1,7 @@
-import OrdersReducerModel from '../model/OrdersReducerModel';
 import { Order } from '../../models';
 import { ADD_ORDER, SET_ORDERS } from '../actions/OrdersActions';
 
-interface State {
+export interface State {
     orders: Order[];
 }
 

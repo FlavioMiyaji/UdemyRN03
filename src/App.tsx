@@ -10,12 +10,19 @@ import {
   applyMiddleware,
 } from 'redux';
 import { Provider } from 'react-redux';
-import ProductsReducer from './store/reducers/ProductsReducer';
+import ReduxThunk from 'redux-thunk';
 import { Colors } from './constants';
 import ShopNavigator from './navigation/ShopNavigator';
-import CartReducer from './store/reducers/CartReducer';
-import OrdersReducer from './store/reducers/OrdersReducer';
-import ReduxThunk from 'redux-thunk';
+import ProductsReducer, { State as ProductsState } from './store/reducers/ProductsReducer';
+import CartReducer, { State as CartState } from './store/reducers/CartReducer';
+import OrdersReducer, { State as OrdersState } from './store/reducers/OrdersReducer';
+import { Product } from './models';
+
+export interface ReducersState {
+  productsReducer: ProductsState;
+  cartReducer: CartState;
+  ordersReducer: OrdersState;
+}
 
 const rootReducer = combineReducers({
   productsReducer: ProductsReducer,
