@@ -3,13 +3,14 @@ import {
     View,
     Platform,
     StyleSheet,
+    GestureResponderEvent,
 } from 'react-native';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import { Colors } from '../../constants';
 import { TouchableComponent } from '../';
 
 interface Props {
-    onPress: Function;
+    onPress: (event: GestureResponderEvent) => void;
     solid?: boolean;
     iconName: string;
 }

@@ -3,11 +3,12 @@ import React, {
     createRef,
 } from 'react';
 import {
+    View,
+    Text,
     Alert,
     Button,
     FlatList,
     StyleSheet,
-    View,
 } from 'react-native';
 import {
     NavigationState,
@@ -65,6 +66,13 @@ const UserProductsScreen = (props: Props) => {
             ]
         );
     };
+    if (!userProducts || userProducts.length <= 0) {
+        return (
+            <View style={styles.centered}>
+                <Text style={Styles.text}>No products found. Maybe start adding some.</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -126,6 +134,12 @@ UserProductsScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) 
 };
 
 const styles = StyleSheet.create({
+    centered: {
+        ...Styles.screen,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 30,
+    },
     screen: {
         ...Styles.screen,
         flex: 0,
