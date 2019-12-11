@@ -63,7 +63,7 @@ const OrderItem = (props: Props) => {
 
 const styles = StyleSheet.create({
     order: {
-        ...Styles.cart,
+        ...Styles.card,
         padding: 5,
         borderBottomColor: Colors.surface,
         borderBottomWidth: 1,

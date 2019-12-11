@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         backgroundColor: Styles.screen.backgroundColor,
     },
     summary: {
-        ...Styles.cart,
+        ...Styles.card,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

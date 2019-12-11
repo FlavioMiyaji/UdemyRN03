@@ -3,21 +3,22 @@ import {
     View,
     Text,
     StyleSheet,
+    GestureResponderEvent,
 } from 'react-native';
+import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import {
     Fonts,
     Colors,
     Styles,
 } from '../../constants';
-import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 import { TouchableComponent } from '../';
-import { Product } from 'src/models';
+import { Product } from '../../models';
 
 interface Props {
     product: Product;
     quantity: number;
     sum: number;
-    onRemove?: Function;
+    onRemove?: (event: GestureResponderEvent) => void;
 }
 
 const CartItem = (props: Props) => {
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     touchable: {
-        ...Styles.cart,
+        ...Styles.card,
         backgroundColor: Colors.primaryVariant,
         padding: 10,
         overflow: 'hidden',

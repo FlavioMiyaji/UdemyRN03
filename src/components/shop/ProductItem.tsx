@@ -5,6 +5,7 @@ import {
     Image,
     StyleSheet,
     ImageBackground,
+    GestureResponderEvent,
 } from 'react-native';
 import {
     Fonts,
@@ -15,7 +16,7 @@ import { TouchableComponent } from '../';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
 
 interface Props {
-    onSelect: Function;
+    onSelect: (event: GestureResponderEvent) => void;
     image: string;
     title: string;
     price: number;
@@ -27,7 +28,7 @@ const ProductItem = (props: Props) => {
         <View style={styles.product}>
             <View style={styles.touchable}>
                 <TouchableComponent
-                    onPress={() => props.onSelect()}
+                    onPress={props.onSelect}
                     useForeground
                 >
                     <View>
@@ -58,7 +59,7 @@ const ProductItem = (props: Props) => {
 
 const styles = StyleSheet.create({
     product: {
-        ...Styles.cart,
+        ...Styles.card,
         height: 230,
         margin: 10,
     },

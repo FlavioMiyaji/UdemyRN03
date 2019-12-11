@@ -11,6 +11,7 @@ import {
     StyleSheet,
     ScrollView,
     ActivityIndicator,
+    GestureResponderEvent,
 } from 'react-native';
 import {
     NavigationScreenProp,
@@ -82,19 +83,8 @@ const formReducer = (state: State, action: Action) => {
     }
 };
 
-const EditProductScreen = (props: Props) => {
-    const { navigation } = props;
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState();
-    const productId = navigation.getParam('productId');
-    let selectedProduct: Product | undefined = undefined;
-    if (productId) {
-        selectedProduct = useSelector((state: ReducersState) =>
-            state.productsReducer.availableProducts.find(({ id }: Product) => id === productId)
-        );
-    }
-
-    const [formState, dispatchFormState] = useReducer(formReducer, {
+const initFormState = (selectedProduct: Product | undefined) => {
+    return {
         inputValues: {
             title: selectedProduct ? selectedProduct.title : '',
             imageUrl: selectedProduct ? selectedProduct.imageUrl : '',
@@ -108,7 +98,22 @@ const EditProductScreen = (props: Props) => {
             description: selectedProduct ? true : false,
         },
         formValid: selectedProduct ? true : false,
-    });
+    };
+};
+
+const EditProductScreen = (props: Props) => {
+    const { navigation } = props;
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState();
+    const productId = navigation.getParam('productId');
+    let selectedProduct: Product | undefined = undefined;
+    if (productId) {
+        selectedProduct = useSelector((state: ReducersState) =>
+            state.productsReducer.availableProducts.find(({ id }: Product) => id === productId)
+        );
+    }
+
+    const [formState, dispatchFormState] = useReducer(formReducer, { ...initFormState(selectedProduct) });
 
     const dispatch = useDispatch();
     const submitHandler = useCallback(() => {
@@ -267,7 +272,7 @@ const EditProductScreen = (props: Props) => {
 
 EditProductScreen.navigationOptions = ({ navigation }: NavigationOptionsProps) => {
     const productId = navigation.getParam('productId');
-    const submit: Function = navigation.getParam('submit');
+    const submit: (event: GestureResponderEvent) => void = navigation.getParam('submit');
     return {
         headerTitle: productId ? 'Editing' : 'Adding',
         headerRight: (

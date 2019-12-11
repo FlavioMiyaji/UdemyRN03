@@ -45,6 +45,9 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+*.jks
+*.apk
+output.json
 
 # fastlane
 #

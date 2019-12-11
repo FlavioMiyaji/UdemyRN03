@@ -26,7 +26,7 @@ const Styles = StyleSheet.create({
         fontSize: 16,
         color: Colors.onBackground,
     },
-    cart: {
+    card: {
         backgroundColor: Colors.surface,
         shadowColor: Colors.onSurface,
         shadowOpacity: 0.2,

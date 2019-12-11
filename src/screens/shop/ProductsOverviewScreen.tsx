@@ -49,7 +49,7 @@ interface NavigationOptionsProps {
 
 const renderInfo = (props: {
     showIntro: boolean;
-    setShowIntro: Function;
+    setShowIntro: (showIntro: boolean) => void;
 }) => {
     return (
         <TouchableComponent
@@ -77,14 +77,14 @@ const renderInfo = (props: {
 
 const renderSlide = ({ showIntro, setShowIntro }: {
     showIntro: boolean;
-    setShowIntro: Function;
+    setShowIntro: (showIntro: boolean) => void;
 }) => {
     return (
         <Modal
             visible={showIntro}
             transparent
         >
-            
+
             <AppIntroSlider
                 renderItem={({ item }) => {
                     return renderSlideItem({ item, setShowIntro });
@@ -110,7 +110,7 @@ const renderSlideItem = ({ item, setShowIntro }: {
         text: string;
         backgroundColor: string;
     },
-    setShowIntro: Function,
+    setShowIntro: (showIntro: boolean) => void,
 }) => {
     return (
         <View

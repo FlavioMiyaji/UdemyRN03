@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import {
     createStackNavigator,
     NavigationStackOptions,
@@ -15,6 +15,7 @@ import {
     OrderScreen,
     UserProductsScreen,
     EditProductScreen,
+    AuthScreen,
 } from '../screens';
 
 interface NavOptionsProps {
@@ -120,4 +121,18 @@ const ShopNavigator = createDrawerNavigator(
     }
 );
 
-export default createAppContainer(ShopNavigator);
+const AuthNavigator = createStackNavigator(
+    {
+        Auth: AuthScreen,
+    },
+    {
+        defaultNavigationOptions: defaultNavOptions,
+    }
+);
+
+const MainNavigator = createSwitchNavigator({
+    Auth: AuthNavigator,
+    Shop: ShopNavigator,
+});
+
+export default createAppContainer(MainNavigator);
