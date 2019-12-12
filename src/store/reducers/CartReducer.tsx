@@ -1,4 +1,4 @@
-import { Product, CartItem } from '../../models';
+import { Product, CartItem, Order } from '../../models';
 import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions/CartActions';
 import { ADD_ORDER } from '../actions/OrdersActions';
 import { DELETE_PRODUCT } from '../actions/ProductsActions';
@@ -8,10 +8,10 @@ export interface State {
     totalAmount: number;
 }
 
-type Action =
+export type Action =
     | { type: 'ADD_TO_CART', payload: Product }
-    | { type: 'REMOVE_FROM_CART', payload: Product }
-    | { type: 'ADD_ORDER' }
+    | { type: 'REMOVE_FROM_CART', payload: { id: string } }
+    | { type: 'ADD_ORDER', payload: Order }
     | { type: 'DELETE_PRODUCT', payload: Product }
     ;
 
@@ -23,7 +23,7 @@ const initState = {
 const CartReducer = (state: State = { ...initState }, action: Action) => {
     switch (action.type) {
         case ADD_TO_CART: {
-            const product: Product = action.payload;
+            const { payload: product } = action;
             const price = product.price;
 
             const items = [...state.items];
@@ -42,7 +42,7 @@ const CartReducer = (state: State = { ...initState }, action: Action) => {
             };
         }
         case REMOVE_FROM_CART: {
-            const productId: string = action.payload.id;
+            const { payload: { id: productId } } = action;
 
             const items = [...state.items];
             let index: number | undefined = items.findIndex(({ product: { id } }) => (id === productId));
@@ -69,7 +69,7 @@ const CartReducer = (state: State = { ...initState }, action: Action) => {
             return initState;
         }
         case DELETE_PRODUCT: {
-            const productId = action.payload.id;
+            const { payload: { id: productId } } = action;
             const items = [...state.items];
             const foundItem: CartItem | undefined = items.find((cartItem: CartItem) => cartItem.product.id === productId);
             if (!foundItem) {

@@ -35,7 +35,7 @@ import {
 } from '../../components';
 import { Styles, Colors } from '../../constants';
 import { fetchProducts } from '../../store/actions/ProductsActions';
-import { ReducersState } from '../../App';
+import { ReducersState as S } from '../../App';
 
 type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
 
@@ -209,7 +209,7 @@ const ProductsOverviewScreen = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState();
-    const products: Product[] = useSelector(({ productsReducer }: ReducersState) => productsReducer.availableProducts);
+    const products: Product[] = useSelector(({ productsState }: S) => productsState.availableProducts);
     const dispatch = useDispatch();
 
     const loadProducts = useCallback(async () => {

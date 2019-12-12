@@ -20,7 +20,7 @@ import Toast from 'react-native-easy-toast';
 import { Colors, Fonts, Styles } from '../../constants';
 import { Product } from '../../models';
 import { addToCard } from '../../store/actions/CartActions';
-import { ReducersState } from '../../App';
+import { ReducersState as S } from '../../App';
 
 type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
 
@@ -34,8 +34,8 @@ interface NavigationOptionsProps {
 
 const ProductDetailScreen = (props: Props) => {
     const productId = props.navigation.getParam('productId');
-    const selectedProduct: Product | undefined = useSelector(({ productsReducer }: ReducersState) =>
-        productsReducer.availableProducts.find(({ id }: Product) => id === productId)
+    const selectedProduct: Product | undefined = useSelector(({ productsState }: S) =>
+        productsState.availableProducts.find(({ id }: Product) => id === productId)
     );
     const toastRef: RefObject<Toast> = createRef();
     const dispatch = useDispatch();

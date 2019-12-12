@@ -1,5 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { CartItem, Order } from '../../models';
+import { ReducersState as S } from '../../App';
+import { Action } from '../reducers/OrdersReducer';
 
 export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
@@ -7,12 +9,12 @@ export const SET_ORDERS = 'SET_ORDERS';
 const baseUrl = 'https://rn-complete-guide-850df.firebaseio.com/';
 
 export const fetchOrders = () => {
-    type Actions = { type: 'SET_ORDERS', payload: Order[] };
-    return async (dispatch: ThunkDispatch<{}, undefined, Actions>) => {
+    return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
         // Any async code with ReduxThunk.
+        const { authState: { userId } } = getState();
         try {
             // .json is besause os the firebase
-            const response = await fetch(`${baseUrl}orders/u1.json`);
+            const response = await fetch(`${baseUrl}orders/${userId}.json`);
             if (!response.ok) {
                 throw new Error('Something went wrong!');
             }
@@ -45,12 +47,11 @@ export const addOrder = (items: CartItem[], totalAmount: number) => {
         return;
     }
     const date = new Date();
-    type Actions = { type: 'ADD_ORDER', payload: { id: string, items: CartItem[], totalAmount: number, date: Date } };
-    return async (dispatch: ThunkDispatch<{}, undefined, Actions>) => {
+    return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
         // Any async code with ReduxThunk.
-
+        const { authState: { token, userId } } = getState();
         // .json is besause os the firebase
-        const response = await fetch(`${baseUrl}orders/u1.json`, {
+        const response = await fetch(`${baseUrl}orders/${userId}.json?auth=${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,14 +67,14 @@ export const addOrder = (items: CartItem[], totalAmount: number) => {
         }
 
         const { name: id } = await response.json();
-
         dispatch({
-            type: ADD_ORDER, payload: {
+            type: ADD_ORDER,
+            payload: new Order(
                 id,
                 items,
                 totalAmount,
-                date,
-            }
+                date
+            ),
         });
     };
 };

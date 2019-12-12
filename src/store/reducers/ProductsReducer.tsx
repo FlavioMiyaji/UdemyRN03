@@ -11,9 +11,9 @@ export interface State {
     userProducts: Product[];
 }
 
-type Action =
-    | { type: 'SET_PRODUCTS', payload: Product[] }
-    | { type: 'CREATE_PRODUCT', payload: Product }
+export type Action =
+    | { type: 'SET_PRODUCTS', payload: { ownerId: string, products: Product[] } }
+    | { type: 'CREATE_PRODUCT', payload: { ownerId: string, product: Product } }
     | { type: 'UPDATE_PRODUCT', payload: Product }
     | { type: 'DELETE_PRODUCT', payload: Product }
     ;
@@ -26,22 +26,22 @@ const initState = {
 const ProductsReducer = (state: State = { ...initState }, action: Action) => {
     switch (action.type) {
         case SET_PRODUCTS: {
-            const products: Product[] = action.payload;
+            const { payload: { ownerId, products } } = action;
             return {
                 ...state,
                 availableProducts: products,
-                userProducts: products.filter(({ ownerId }: Product) => (ownerId === 'u1')),
+                userProducts: products.filter(({ ownerId: id }: Product) => (id === ownerId)),
             }
         }
         case CREATE_PRODUCT: {
-            const payload: Product = action.payload;
+            const { payload: { ownerId, product } } = action;
             const newProduct: Product = new Product(
-                payload.id,
-                'u1',
-                payload.title,
-                payload.imageUrl,
-                payload.description,
-                payload.price,
+                product.id,
+                ownerId,
+                product.title,
+                product.imageUrl,
+                product.description,
+                product.price,
             );
             return {
                 ...state,
@@ -50,15 +50,15 @@ const ProductsReducer = (state: State = { ...initState }, action: Action) => {
             };
         }
         case UPDATE_PRODUCT: {
-            const payload: Product = action.payload;
+            const { payload: product } = action;
             return {
                 ...state,
-                availableProducts: updateProducts(state.availableProducts, payload),
-                userProducts: updateProducts(state.userProducts, payload),
+                availableProducts: updateProducts(state.availableProducts, product),
+                userProducts: updateProducts(state.userProducts, product),
             };
         }
         case DELETE_PRODUCT: {
-            const productId: string = action.payload.id;
+            const { payload: { id: productId } } = action;
             return {
                 ...state,
                 availableProducts: state.availableProducts.filter(({ id }: Product) => id !== productId),

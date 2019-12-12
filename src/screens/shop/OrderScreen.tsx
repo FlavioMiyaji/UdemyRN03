@@ -21,7 +21,7 @@ import { Styles, Colors } from '../../constants';
 import { Order } from '../../models';
 import { OrderItem, HeaderButton } from '../../components';
 import { fetchOrders } from '../../store/actions/OrdersActions';
-import { ReducersState } from '../../App';
+import { ReducersState as S } from '../../App';
 
 type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
 
@@ -38,7 +38,7 @@ const OrderScreen = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState();
-    const orders = useSelector(({ ordersReducer }: ReducersState) => ordersReducer.orders);
+    const orders = useSelector(({ ordersState }: S) => ordersState.orders);
 
     const dispatch = useDispatch();
 

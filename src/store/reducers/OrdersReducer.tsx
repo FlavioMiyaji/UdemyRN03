@@ -5,7 +5,7 @@ export interface State {
     orders: Order[];
 }
 
-type Action =
+export type Action =
     | { type: 'ADD_ORDER', payload: Order }
     | { type: 'SET_ORDERS', payload: Order[] }
     ;

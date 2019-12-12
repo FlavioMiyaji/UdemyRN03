@@ -27,7 +27,7 @@ import { CartItem } from '../../models';
 import { CartItem as Item } from '../../components';
 import { removeFromCard } from '../../store/actions/CartActions';
 import { addOrder } from '../../store/actions/OrdersActions';
-import { ReducersState } from '../../App';
+import { ReducersState as S } from '../../App';
 
 type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
 
@@ -39,8 +39,8 @@ const CartScreen = (props: Props) => {
     const { navigation } = props;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
-    const items: CartItem[] = useSelector(({ cartReducer }: ReducersState) => cartReducer.items);
-    const totalAmount: number = useSelector(({ cartReducer }: ReducersState) => cartReducer.totalAmount);
+    const items: CartItem[] = useSelector(({ cartState }: S) => cartState.items);
+    const totalAmount: number = useSelector(({ cartState }: S) => cartState.totalAmount);
     const toastRef: RefObject<Toast> = createRef();
     const dispatch = useDispatch();
 

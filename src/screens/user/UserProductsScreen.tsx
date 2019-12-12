@@ -21,7 +21,7 @@ import { Colors, Styles } from '../../constants';
 import { Product } from '../../models';
 import { ProductItem, HeaderButton } from '../../components';
 import { deleteProduct } from '../../store/actions/ProductsActions';
-import { ReducersState } from '../../App';
+import { ReducersState as S } from '../../App';
 
 type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
 
@@ -35,7 +35,7 @@ interface NavigationOptionsProps {
 
 const UserProductsScreen = (props: Props) => {
     const toastRef: RefObject<Toast> = createRef();
-    const userProducts = useSelector(({ productsReducer }: ReducersState) => productsReducer.userProducts);
+    const userProducts = useSelector(({ productsState }: S) => productsState.userProducts);
     const dispatch = useDispatch();
 
     const editHandler = (product: Product) => {

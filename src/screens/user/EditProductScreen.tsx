@@ -23,7 +23,7 @@ import { Styles, Colors } from '../../constants';
 import { Product } from '../../models';
 import { HeaderButton, Input } from '../../components';
 import { updateProduct, createProduct } from '../../store/actions/ProductsActions';
-import { ReducersState } from '../../App';
+import { ReducersState as S } from '../../App';
 
 type Navigation = NavigationScreenProp<NavigationState, NavigationParams>;
 
@@ -108,10 +108,11 @@ const EditProductScreen = (props: Props) => {
     const productId = navigation.getParam('productId');
     let selectedProduct: Product | undefined = undefined;
     if (productId) {
-        selectedProduct = useSelector((state: ReducersState) =>
-            state.productsReducer.availableProducts.find(({ id }: Product) => id === productId)
+        selectedProduct = useSelector(({ productsState }: S) =>
+            productsState.availableProducts.find(({ id }: Product) => id === productId)
         );
     }
+    const userId = useSelector(({ authState }: S) => (authState.userId));
 
     const [formState, dispatchFormState] = useReducer(formReducer, { ...initFormState(selectedProduct) });
 
@@ -147,7 +148,7 @@ const EditProductScreen = (props: Props) => {
                     await dispatch(
                         createProduct({
                             id: '',
-                            ownerId: 'u1',
+                            ownerId: userId,
                             title,
                             imageUrl,
                             price: +price,
