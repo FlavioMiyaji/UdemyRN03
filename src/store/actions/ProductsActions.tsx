@@ -9,20 +9,18 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 const baseUrl = 'https://rn-complete-guide-850df.firebaseio.com/';
+const baseMap = 'products';
+const firebaseJson = '.json'; // .json is besause os the firebase
 
 export const fetchProducts = () => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
         const { authState: { userId } } = getState();
-        // Any async code with ReduxThunk.
         try {
-            // .json is besause os the firebase
-            const response = await fetch(`${baseUrl}products.json`);
+            const response = await fetch(`${baseUrl}${baseMap}${firebaseJson}`);
             if (!response.ok) {
                 throw new Error('Something went wrong!');
             }
-
             const data = await response.json();
-
             const products: Product[] = [];
             for (const key in data) {
                 const product = data[key];
@@ -32,7 +30,6 @@ export const fetchProducts = () => {
                     ownerId: userId,
                 });
             }
-
             dispatch({
                 type: SET_PRODUCTS,
                 payload: {
@@ -49,24 +46,20 @@ export const fetchProducts = () => {
 export const deleteProduct = (product: Product) => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
         const { authState: { token } } = getState();
-        const response = await fetch(`${baseUrl}products/${product.id}.json?auth=${token}`, {
+        const response = await fetch(`${baseUrl}${baseMap}/${product.id}${firebaseJson}?auth=${token}`, {
             method: 'DELETE',
         });
         if (!response.ok) {
             throw new Error('Something went wrong!');
         }
-
         dispatch({ type: DELETE_PRODUCT, payload: { ...product } });
     };
 };
 
 export const createProduct = (product: Product) => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
-        // Any async code with ReduxThunk.
         const { authState: { token, userId } } = getState();
-
-        // .json is besause os the firebase
-        const response = await fetch(`${baseUrl}products.json?auth=${token}`, {
+        const response = await fetch(`${baseUrl}${baseMap}${firebaseJson}?auth=${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,17 +74,13 @@ export const createProduct = (product: Product) => {
         if (!response.ok) {
             throw new Error('Something went wrong!');
         }
-
         const { name: id } = await response.json();
-
         dispatch({
             type: CREATE_PRODUCT,
             payload: {
+                ...product,
+                id,
                 ownerId: userId,
-                product: {
-                    ...product,
-                    id,
-                }
             },
         });
     };
@@ -100,7 +89,7 @@ export const createProduct = (product: Product) => {
 export const updateProduct = (product: Product) => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
         const { authState: { token } } = getState();
-        const response = await fetch(`${baseUrl}products/${product.id}.json?auth=${token}`, {
+        const response = await fetch(`${baseUrl}${baseMap}/${product.id}${firebaseJson}?auth=${token}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,7 +103,6 @@ export const updateProduct = (product: Product) => {
         if (!response.ok) {
             throw new Error('Something went wrong!');
         }
-
         dispatch({ type: UPDATE_PRODUCT, payload: product });
     };
 };

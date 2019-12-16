@@ -5,6 +5,7 @@ import CartScreen from './shop/CartScreen';
 import UserProductsScreen from './user/UserProductsScreen';
 import EditProductScreen from './user/EditProductScreen';
 import AuthScreen from './user/AuthScreen';
+import StartUpScreen from './StartUpScreen';
 
 export {
     ProductsOverviewScreen,
@@ -14,4 +15,5 @@ export {
     EditProductScreen,
     UserProductsScreen,
     AuthScreen,
+    StartUpScreen,
 };

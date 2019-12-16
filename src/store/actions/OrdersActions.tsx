@@ -7,20 +7,18 @@ export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
 const baseUrl = 'https://rn-complete-guide-850df.firebaseio.com/';
+const baseMap = 'orders';
+const firebaseJson = '.json'; // .json is besause os the firebase
 
 export const fetchOrders = () => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
-        // Any async code with ReduxThunk.
         const { authState: { userId } } = getState();
         try {
-            // .json is besause os the firebase
-            const response = await fetch(`${baseUrl}orders/${userId}.json`);
+            const response = await fetch(`${baseUrl}${baseMap}/${userId}${firebaseJson}`);
             if (!response.ok) {
                 throw new Error('Something went wrong!');
             }
-
             const data = await response.json();
-
             const orders: Order[] = [];
             for (const key in data) {
                 const order = data[key];
@@ -31,7 +29,6 @@ export const fetchOrders = () => {
                     new Date(order.date),
                 ));
             }
-
             dispatch({
                 type: SET_ORDERS,
                 payload: orders,
@@ -48,10 +45,8 @@ export const addOrder = (items: CartItem[], totalAmount: number) => {
     }
     const date = new Date();
     return async (dispatch: ThunkDispatch<S, undefined, Action>, getState: () => S) => {
-        // Any async code with ReduxThunk.
         const { authState: { token, userId } } = getState();
-        // .json is besause os the firebase
-        const response = await fetch(`${baseUrl}orders/${userId}.json?auth=${token}`, {
+        const response = await fetch(`${baseUrl}${baseMap}/${userId}${firebaseJson}?auth=${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,7 +60,6 @@ export const addOrder = (items: CartItem[], totalAmount: number) => {
         if (!response.ok) {
             throw new Error('Something went wrong!');
         }
-
         const { name: id } = await response.json();
         dispatch({
             type: ADD_ORDER,

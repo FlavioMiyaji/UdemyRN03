@@ -95,7 +95,10 @@ const AuthScreen = (props: Props) => {
     const [signup, setSignup] = useState(false);
     const dispatch = useDispatch();
 
-    const [formState, dispatchFormState] = useReducer(formReducer, { ...initFormState });
+    const [formState, dispatchFormState] = useReducer(
+        formReducer,
+        { ...initFormState }
+    );
 
     const inputChangeHandler = useCallback(({ id, value, valid }: {
         id: string;

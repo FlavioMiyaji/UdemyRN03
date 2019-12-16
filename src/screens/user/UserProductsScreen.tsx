@@ -69,7 +69,7 @@ const UserProductsScreen = (props: Props) => {
     if (!userProducts || userProducts.length <= 0) {
         return (
             <View style={styles.centered}>
-                <Text style={Styles.text}>No products found. Maybe start adding some.</Text>
+                <Text style={Styles.text}>No products found. Maybe start adding some?</Text>
             </View>
         );
     }

@@ -1,4 +1,4 @@
-import { SINGUP, LOGIN } from '../actions/AuthActions';
+import { AUTHENTICATE, LOGOUT } from '../actions/AuthActions';
 
 export interface State {
     token: string;
@@ -6,8 +6,8 @@ export interface State {
 }
 
 export type Action =
-    | { type: 'SINGUP', payload: State }
-    | { type: 'LOGIN', payload: State }
+    | { type: 'AUTHENTICATE', payload: State }
+    | { type: 'LOGOUT' }
     ;
 
 const initState = {
@@ -17,11 +17,15 @@ const initState = {
 
 const AuthReducer = (state: State = { ...initState }, action: Action) => {
     switch (action.type) {
-        case SINGUP:
-        case LOGIN: {
+        case AUTHENTICATE: {
             return {
                 ...state,
                 ...action.payload,
+            };
+        }
+        case LOGOUT: {
+            return {
+                ...initState
             };
         }
         default: return state;

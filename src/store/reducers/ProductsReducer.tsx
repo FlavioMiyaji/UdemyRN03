@@ -13,7 +13,7 @@ export interface State {
 
 export type Action =
     | { type: 'SET_PRODUCTS', payload: { ownerId: string, products: Product[] } }
-    | { type: 'CREATE_PRODUCT', payload: { ownerId: string, product: Product } }
+    | { type: 'CREATE_PRODUCT', payload: Product }
     | { type: 'UPDATE_PRODUCT', payload: Product }
     | { type: 'DELETE_PRODUCT', payload: Product }
     ;
@@ -34,10 +34,10 @@ const ProductsReducer = (state: State = { ...initState }, action: Action) => {
             }
         }
         case CREATE_PRODUCT: {
-            const { payload: { ownerId, product } } = action;
+            const { payload: product } = action;
             const newProduct: Product = new Product(
                 product.id,
-                ownerId,
+                product.ownerId,
                 product.title,
                 product.imageUrl,
                 product.description,
@@ -51,10 +51,12 @@ const ProductsReducer = (state: State = { ...initState }, action: Action) => {
         }
         case UPDATE_PRODUCT: {
             const { payload: product } = action;
+            const availableProducts = updateProducts(state.availableProducts, product);
+            const userProducts = updateProducts(state.userProducts, product);
             return {
                 ...state,
-                availableProducts: updateProducts(state.availableProducts, product),
-                userProducts: updateProducts(state.userProducts, product),
+                availableProducts,
+                userProducts,
             };
         }
         case DELETE_PRODUCT: {
@@ -70,20 +72,20 @@ const ProductsReducer = (state: State = { ...initState }, action: Action) => {
 };
 
 const updateProducts = (list: Product[], product: Product) => {
-    const cloneList = [...list];
-    const index: number | undefined = cloneList.findIndex(
+    const products = [...list];
+    const index: number | undefined = products.findIndex(
         ({ id }: Product) => id === product.id
     );
     const updatedProduct = new Product(
         product.id,
-        cloneList[index].ownerId,
+        products[index].ownerId,
         product.title,
         product.imageUrl,
         product.description,
-        cloneList[index].price,
+        products[index].price,
     );
-    cloneList[index] = updatedProduct;
-    return cloneList;
+    products[index] = updatedProduct;
+    return products;
 }
 
 export default ProductsReducer;

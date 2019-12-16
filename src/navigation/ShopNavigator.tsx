@@ -1,13 +1,32 @@
-import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import React, {
+    ComponentType,
+} from 'react';
+import {
+    createAppContainer,
+    createSwitchNavigator,
+    SafeAreaView,
+} from 'react-navigation';
 import {
     createStackNavigator,
     NavigationStackOptions,
 } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import { Platform, Text } from 'react-native';
+import {
+    createDrawerNavigator,
+    DrawerContentComponentProps,
+    DrawerActions,
+    DrawerItems,
+} from 'react-navigation-drawer';
+import {
+    Text,
+    View,
+    Platform,
+    Button,
+} from 'react-native';
 import { default as Icon } from 'react-native-vector-icons/FontAwesome5';
-import { Colors, Fonts, Styles } from '../constants';
+import {
+    Colors,
+    Styles,
+} from '../constants';
 import {
     ProductsOverviewScreen,
     ProductDetailScreen,
@@ -16,7 +35,10 @@ import {
     UserProductsScreen,
     EditProductScreen,
     AuthScreen,
+    StartUpScreen,
 } from '../screens';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/actions/AuthActions';
 
 interface NavOptionsProps {
     label: string;
@@ -118,8 +140,37 @@ const ShopNavigator = createDrawerNavigator(
                 backgroundColor: Colors.surface,
             },
         },
+        contentComponent: (props: DrawerContentComponentProps) => {
+            const { navigation: { navigate } } = props;
+            const dispatch = useDispatch();
+            return (
+                <View style={{ flex: 1 }}>
+                    <SafeAreaView
+                        forceInset={{
+                            top: 'always',
+                            horizontal: 'never',
+                        }}
+                        style={{ flex: 1 }}
+                    >
+                        <DrawerItems {...props} />
+                        <View style={{ padding: 10 }}>
+                            <Button
+                                title="Logout"
+                                color={Colors.primary}
+                                onPress={() => {
+                                    dispatch(logout());
+                                    navigate('Auth');
+                                }}
+                            />
+                        </View>
+                    </SafeAreaView>
+                </View>
+            );
+        },
     }
 );
+
+
 
 const AuthNavigator = createStackNavigator(
     {
@@ -131,6 +182,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+    StartUp: StartUpScreen,
     Auth: AuthNavigator,
     Shop: ShopNavigator,
 });

@@ -114,7 +114,10 @@ const EditProductScreen = (props: Props) => {
     }
     const userId = useSelector(({ authState }: S) => (authState.userId));
 
-    const [formState, dispatchFormState] = useReducer(formReducer, { ...initFormState(selectedProduct) });
+    const [formState, dispatchFormState] = useReducer(
+        formReducer,
+        { ...initFormState(selectedProduct) }
+    );
 
     const dispatch = useDispatch();
     const submitHandler = useCallback(() => {
