@@ -41,12 +41,14 @@ const StartUpScreen = (props: Props) => {
             }
             const transformedData: UserData = JSON.parse(userData);
             const { token, userId, expiryDate } = transformedData;
-            if (!token || !userId || new Date(expiryDate) <= new Date()) {
+            const expirationDate = new Date(expiryDate);
+            if (!token || !userId || expirationDate <= new Date()) {
                 navigate('Auth');
                 return;
             }
+            const expirationTime = expirationDate.getTime() - new Date().getTime();
             navigate('Shop');
-            dispatch(authenticate(transformedData));
+            dispatch(authenticate(transformedData, expirationTime));
         };
         tryLogin();
     }, [navigate, dispatch]);

@@ -6,7 +6,7 @@ import {
 } from 'redux';
 import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
-import ShopNavigator from './navigation/ShopNavigator';
+import NavigationContainer from './navigation/NavigationContainer';
 import ProductsReducer, { State as ProductsState } from './store/reducers/ProductsReducer';
 import CartReducer, { State as CartState } from './store/reducers/CartReducer';
 import OrdersReducer, { State as OrdersState } from './store/reducers/OrdersReducer';
@@ -31,7 +31,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 const App = () => {
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigationContainer />
     </Provider>
   );
 };

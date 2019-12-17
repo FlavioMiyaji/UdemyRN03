@@ -1,7 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk';
+import { AsyncStorage, Alert } from 'react-native';
 import { ReducersState as S } from '../../App';
 import { Action, State } from '../reducers/AuthReducer';
-import { AsyncStorage } from 'react-native';
 
 let timer: number;
 
@@ -13,27 +13,25 @@ const userData = 'userData';
 const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts';
 const webAPIKey = 'AIzaSyBx7C-QoM3bDcFgGfbKQ76xULzpCGA_1g0';
 
-export const authenticate = (userData: State): Action => {
-    return {
-        type: AUTHENTICATE,
-        payload: userData,
+export const authenticate = (userData: State, expirationTime: number): any => {
+    return (dispatch: ThunkDispatch<S, undefined, Action>) => {
+        dispatch(setLogoutTimer(expirationTime));
+        dispatch({
+            type: AUTHENTICATE,
+            payload: userData,
+        });
     };
 };
 
 export const logout = (): Action => {
-    clearLogoutTimer();
+    if (timer) {
+        clearTimeout(timer);
+    }
     AsyncStorage.removeItem(userData);
     return { type: LOGOUT };
 };
 
-const clearLogoutTimer = () => {
-    if (!timer) {
-        return;
-    }
-    setLogoutTimer(timer);
-};
-
-const setLogoutTimer = (expirationTime: number) => {
+const setLogoutTimer = (expirationTime: number): any => {
     return (dispatch: ThunkDispatch<S, undefined, Action>) => {
         timer = setTimeout(() => {
             dispatch(logout());
@@ -41,7 +39,7 @@ const setLogoutTimer = (expirationTime: number) => {
     };
 };
 
-export const singup = (email: string, password: string) => {
+export const singup = (email: string, password: string): any => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>) => {
         const response = await fetch(`${baseUrl}:signUp?key=${webAPIKey}`, {
             method: 'POST',
@@ -58,18 +56,20 @@ export const singup = (email: string, password: string) => {
             throw new Error('Something went worng!');
         }
         const { idToken, localId, expiresIn } = await response.json();
-        const expiryDate = new Date(new Date().getTime() + (parseInt(expiresIn) * 1000)).toISOString();
+        const expirationTime = parseInt(expiresIn) * 1000;
+        Alert.alert('expirationTime', `${expirationTime}`);
+        const expiryDate = new Date(new Date().getTime() + expirationTime).toISOString();
         const userData = {
             token: idToken,
             userId: localId,
             expiryDate,
         };
-        dispatch(authenticate(userData));
+        dispatch(authenticate(userData, expirationTime));
         saveDataToStorage(userData);
     };
 };
 
-export const login = (email: string, password: string) => {
+export const login = (email: string, password: string): any => {
     return async (dispatch: ThunkDispatch<S, undefined, Action>) => {
         const response = await fetch(`${baseUrl}:signInWithPassword?key=${webAPIKey}`, {
             method: 'POST',
@@ -91,13 +91,15 @@ export const login = (email: string, password: string) => {
             throw new Error(message);
         }
         const { idToken, localId, expiresIn } = await response.json();
-        const expiryDate = new Date(new Date().getTime() + (parseInt(expiresIn) * 1000)).toISOString();
+        const expirationTime = parseInt(expiresIn) * 1000;
+        Alert.alert('expirationTime', `${expirationTime}`);
+        const expiryDate = new Date(new Date().getTime() + expirationTime).toISOString();
         const userData = {
             token: idToken,
             userId: localId,
             expiryDate,
         };
-        dispatch(authenticate(userData));
+        dispatch(authenticate(userData, expirationTime));
         saveDataToStorage(userData);
     };
 };
@@ -108,7 +110,7 @@ export interface UserData {
     expiryDate: string,
 }
 
-const saveDataToStorage = ({ token, userId, expiryDate }: UserData) => {
+const saveDataToStorage = ({ token, userId, expiryDate }: UserData): void => {
     AsyncStorage.setItem(
         userData,
         JSON.stringify({
