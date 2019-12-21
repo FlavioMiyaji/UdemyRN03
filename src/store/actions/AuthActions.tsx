@@ -11,7 +11,7 @@ export const LOGOUT = 'LOGOUT';
 const userData = 'userData';
 
 const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts';
-const webAPIKey = 'AIzaSyBx7C-QoM3bDcFgGfbKQ76xULzpCGA_1g0';
+const webAPIKey = '';
 
 export const authenticate = (userData: State, expirationTime: number): any => {
     return (dispatch: ThunkDispatch<S, undefined, Action>) => {
