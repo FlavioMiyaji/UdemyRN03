@@ -2,11 +2,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import { CartItem, Order } from '../../models';
 import { ReducersState as S } from '../../App';
 import { Action } from '../reducers/OrdersReducer';
+import { baseUrl } from '../../the-shop.json';
 
 export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
-const baseUrl = 'https://rn-complete-guide-850df.firebaseio.com/';
 const baseMap = 'orders';
 const firebaseJson = '.json'; // .json is besause os the firebase
 

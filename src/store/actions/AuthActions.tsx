@@ -2,6 +2,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AsyncStorage, Alert } from 'react-native';
 import { ReducersState as S } from '../../App';
 import { Action, State } from '../reducers/AuthReducer';
+import { authUrl as baseUrl, webAPIKey } from '../../the-shop.json';
 
 let timer: number;
 
@@ -9,9 +10,6 @@ export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 
 const userData = 'userData';
-
-const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts';
-const webAPIKey = 'AIzaSyBx7C-QoM3bDcFgGfbKQ76xULzpCGA_1g0';
 
 export const authenticate = (userData: State, expirationTime: number): any => {
     return (dispatch: ThunkDispatch<S, undefined, Action>) => {
